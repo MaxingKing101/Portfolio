@@ -8,13 +8,18 @@
     "css": "src/index.css",
     "baseColor": "slate",
     "cssVariables": true,
-    "prefix": ""
+    "prefix": "",
+    "content": [
+      "./src/**/*.{ts,tsx}",
+      "./index.html"
+    ]
   },
   "aliases": {
     "components": "@/components",
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
     "lib": "@/lib",
-    "hooks": "@/hooks"
+    "hooks": "@/hooks",
+    "public": "/portfolio/public"
   }
 }
