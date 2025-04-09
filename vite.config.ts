@@ -16,17 +16,21 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       external: ["@emotion/react/jsx-runtime"], // Add explicit external
       output: {
-        manualChunks: {
-          react: ["react", "react-dom"],
-          vendor: ["lodash", "date-fns"],
-          shadcn: ["@radix-ui/*"]
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (id.includes('@radix-ui')) return 'radix-ui';
+            if (id.includes('date-fns')) return 'date-fns';
+            if (id.includes('lodash')) return 'lodash';
+            return 'vendor';
+          }
+          return null; // Default return value for other cases
         }
       }
     }
   },
   plugins: [
-    react({ // Remove emotion reference unless needed
-      jsxImportSource: "react", // Default to React's JSX runtime
+    react({
+      jsxImportSource: "react",
     }),
     mode === 'development' && componentTagger() as PluginOption
   ].filter(Boolean),
