@@ -4,16 +4,17 @@ import path from "node:path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  base: "/portfolio/",  // Trailing slash for subpath consistency
+  base: "/portfolio/",
   server: {
-    host: "0.0.0.0",    // Standard IPv4 fallback
+    host: "0.0.0.0",
     port: 8080,
-    open: mode === "development" // Auto-open in dev
+    open: mode === "development"
   },
   build: {
     minify: mode === "production" ? "terser" : false,
     sourcemap: mode === "development",
     rollupOptions: {
+      external: ["@emotion/react/jsx-runtime"], // Add explicit external
       output: {
         manualChunks: {
           react: ["react", "react-dom"],
@@ -24,9 +25,8 @@ export default defineConfig(({ mode }) => ({
     }
   },
   plugins: [
-    react({
-      jsxImportSource: "@emotion/react",
-      // Removed invalid 'devtools' property
+    react({ // Remove emotion reference unless needed
+      jsxImportSource: "react", // Default to React's JSX runtime
     }),
     mode === 'development' && componentTagger() as PluginOption
   ].filter(Boolean),
@@ -35,10 +35,5 @@ export default defineConfig(({ mode }) => ({
       { find: "@", replacement: path.resolve(__dirname, "./src") },
       { find: "@public", replacement: path.resolve(__dirname, "./public") }
     ]
-  },
-  envDir: "../", // Root directory for environment files
-  define: {
-    __BASE_URL__: JSON.stringify("/portfolio/") // Global constant
-  },
-  assetsInclude: ["**/*.mov", "**/*.mp4"] // Add video formats
+  }
 }));

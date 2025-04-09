@@ -16,6 +16,8 @@
     "deploy": "gh-pages -d dist -b gh-pages -r https://github.com/maxingking101/portfolio.git"
   },
   "dependencies": {
+    "@emotion/babel-plugin": "^11.13.5",
+    "@emotion/react": "^11.14.0",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
