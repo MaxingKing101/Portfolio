@@ -4,7 +4,7 @@ import path from "node:path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  base: "/", // Changed from "/portfolio/" to "/" for root deployment
+  base: "/portfolio/", // Corrected for GitHub Pages deployment to a subpath
   server: {
     host: "0.0.0.0",
     port: 8080,
