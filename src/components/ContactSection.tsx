@@ -1,4 +1,4 @@
-import { Instagram, Twitter, Youtube, Mail, Loader2 } from 'lucide-react';
+import { Instagram, Twitter, Mail, Loader2, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 
@@ -44,12 +44,13 @@ const ContactSection = () => {
           >
             <Twitter className="w-6 h-6 md:w-8 md:h-8" aria-hidden="true" />
           </a>
-          <div className="text-gray-400 hover-scale p-2">
-            <Youtube className="w-6 h-6 md:w-8 md:h-8" aria-hidden="true" />
+          <div className="text-gray-400 flex items-center gap-2 p-2">
+            <MessageCircle className="w-6 h-6 md:w-8 md:h-8" aria-hidden="true" />
+            <span className="text-gray-300 text-sm md:text-base">maxingking_</span>
           </div>
           <div className="text-gray-400 flex items-center gap-2 p-2">
             <Mail className="w-6 h-6 md:w-8 md:h-8" aria-hidden="true" />
-            <span className="text-gray-300 text-sm md:text-base">maxingking101@proton.me</span>
+            <span className="text-gray-300 text-sm md:text-base">maxingkingvfx@proton.me</span>
           </div>
         </div>
         

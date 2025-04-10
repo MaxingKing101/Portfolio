@@ -91,14 +91,14 @@ const WorkSection = () => {
   };
 
   return (
-    <section id="work" className="py-20 bg-black" aria-labelledby="work-title">
-      <div className="container mx-auto px-4 md:px-8">
-        <h2 id="work-title" className="text-4xl font-bold mb-4 uppercase text-white">
+    <section id="work" className="py-12 sm:py-20 bg-black" aria-labelledby="work-title">
+      <div className="container mx-auto px-3 sm:px-4 md:px-8">
+        <h2 id="work-title" className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 uppercase text-white">
           MY <span className="text-brand-purple">WORK</span>
           <div className="w-16 h-1 bg-brand-purple mt-2"></div>
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
           {projects.map((project) => (
             <div 
               key={project.id} 
@@ -117,7 +117,7 @@ const WorkSection = () => {
               <img 
                 src={project.imageUrl} 
                 alt={project.title}
-                className="w-full h-64 object-cover"
+                className="w-full h-48 sm:h-64 object-cover"
                 loading="lazy"
                 onLoad={() => handleImageLoad(project.id)}
                 width={400}
@@ -137,15 +137,15 @@ const WorkSection = () => {
       {/* Project Modal */}
       {selectedProject && (
         <div 
-          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-2 sm:p-4"
           role="dialog"
           aria-labelledby={`modal-${selectedProject.id}`}
           aria-modal="true"
         >
           <div className="bg-brand-deepest-blue rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto">
-            <div className="p-6">
+            <div className="p-3 sm:p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 id={`modal-${selectedProject.id}`} className="text-2xl font-bold glow-heading">{selectedProject.title}</h3>
+                <h3 id={`modal-${selectedProject.id}`} className="text-xl sm:text-2xl font-bold glow-heading">{selectedProject.title}</h3>
                 <button 
                   onClick={closeModal}
                   className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800"

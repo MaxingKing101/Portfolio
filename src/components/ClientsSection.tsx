@@ -46,19 +46,19 @@ const ClientsSection = () => {
   const [hoveredTestimonial, setHoveredTestimonial] = useState<number | null>(null);
 
   return (
-    <section id="clients" className="py-20 bg-black" aria-labelledby="clients-title">
-      <div className="container mx-auto px-4 md:px-8">
-        <h2 id="clients-title" className="text-4xl font-bold mb-4 uppercase text-white">
+    <section id="clients" className="py-12 sm:py-20 bg-black" aria-labelledby="clients-title">
+      <div className="container mx-auto px-3 sm:px-4 md:px-8">
+        <h2 id="clients-title" className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 uppercase text-white">
           CLIENTS
           <div className="w-16 h-1 bg-brand-purple mt-2"></div>
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-8 sm:mt-12">
           {clients.map((client, index) => (
             <div 
               key={client.id}
               className={cn(
-                "client-card bg-opacity-10 bg-gray-800 border border-gray-800 p-6 rounded-lg transition-all duration-300 animate-fade-in hover-glow",
+                "client-card bg-opacity-10 bg-gray-800 border border-gray-800 p-4 sm:p-6 rounded-lg transition-all duration-300 animate-fade-in hover-glow",
                 "transform-gpu hover:scale-105 focus-within:scale-105",
                 "hover:border-brand-purple focus-within:border-brand-purple",
                 (focusedTestimonial === client.id || hoveredTestimonial === client.id) && "border-brand-purple"
@@ -80,10 +80,10 @@ const ClientsSection = () => {
                   {client.icon}
                 </div>
                 <div>
-                  <h3 id={`client-${client.id}-name`} className="text-xl font-semibold text-white glow-heading">
+                  <h3 id={`client-${client.id}-name`} className="text-lg sm:text-xl font-semibold text-white glow-heading">
                     {client.name}
                   </h3>
-                  <p className="text-brand-light-purple text-sm">
+                  <p className="text-brand-light-purple text-xs sm:text-sm">
                     {client.role}
                   </p>
                 </div>
