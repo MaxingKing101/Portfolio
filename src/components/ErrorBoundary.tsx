@@ -34,7 +34,7 @@ class ErrorBoundary extends Component<Props, State> {
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">Something went wrong</h2>
             <p className="mb-4">Please try refreshing the page.</p>
             <button
-              className="bg-brand-primary px-6 py-3 sm:py-2 rounded-lg hover:bg-brand-primary-dark transition-colors w-full"
+              className="bg-brand-primary px-8 py-4 sm:py-3 text-lg sm:text-xl rounded-lg hover:bg-brand-primary-dark transition-colors duration-300 w-full shadow-lg hover:shadow-xl transform hover:scale-105"
               onClick={() => window.location.reload()}
             >
               Try Again
