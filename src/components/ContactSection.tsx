@@ -74,7 +74,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
           <div className="flex items-center justify-center mx-2 md:mx-3">
             <div className="flex items-center">
               <img 
-                src={process.env.NODE_ENV === 'production' ? '/portfolio-test/Contact-icons/discord-logo.png' : '/Contact-icons/discord-logo.png'} 
+                src={process.env.NODE_ENV === 'production' ? '/portfolio/Contact-icons/discord-logo.png' : '/Contact-icons/discord-logo.png'} 
                 alt="Discord" 
                 className="w-[4.5rem] h-[4.5rem] md:w-[5.5rem] md:h-[5.5rem] object-contain"
                 loading="lazy"
