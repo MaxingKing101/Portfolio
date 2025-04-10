@@ -1,4 +1,4 @@
-import { Instagram, Twitter, Mail, Loader2, MessageCircle } from 'lucide-react';
+import { Instagram, Twitter, Mail, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 
@@ -25,51 +25,63 @@ const ContactSection = () => {
           channels and let's create something amazing together.
         </p>
         
-        <div className="flex flex-wrap justify-center gap-8 mb-12 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          <a 
-            href="https://instagram.com/maxingking101" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-gray-400 hover:text-brand-purple transition-colors hover-scale p-2"
-            aria-label="Follow on Instagram"
-          >
-            <Instagram className="w-6 h-6 md:w-8 md:h-8" aria-hidden="true" />
-          </a>
-          <a 
-            href="https://twitter.com/maxingking101" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-gray-400 hover:text-brand-purple transition-colors hover-scale p-2"
-            aria-label="Follow on Twitter"
-          >
-            <Twitter className="w-6 h-6 md:w-8 md:h-8" aria-hidden="true" />
-          </a>
-          <div className="text-gray-400 flex items-center gap-2 p-2">
-            <MessageCircle className="w-6 h-6 md:w-8 md:h-8" aria-hidden="true" />
-            <span className="text-gray-300 text-sm md:text-base">maxingking_</span>
+        <div className="flex flex-wrap justify-center items-center mb-12">
+          <div className="flex items-center justify-center mx-2 md:mx-3">
+            <a 
+              href="https://instagram.com/maxingking101" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center text-gray-400 hover:text-brand-purple transition-colors p-2"
+              aria-label="Follow on Instagram"
+            >
+              <Instagram className="w-8 h-8 md:w-9 md:h-9" aria-hidden="true" />
+            </a>
           </div>
-          <div className="text-gray-400 flex items-center gap-2 p-2">
-            <Mail className="w-6 h-6 md:w-8 md:h-8" aria-hidden="true" />
-            <span className="text-gray-300 text-sm md:text-base">maxingkingvfx@proton.me</span>
+          <div className="flex items-center justify-center ml-4 md:ml-6">
+            <a 
+              href="https://twitter.com/maxingking101" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center text-gray-400 hover:text-brand-purple transition-colors p-2"
+              aria-label="Follow on Twitter"
+            >
+              <Twitter className="w-8 h-8 md:w-9 md:h-9" aria-hidden="true" />
+            </a>
+          </div>
+          <div className="flex items-center justify-center mx-2 md:mx-3">
+            <div className="flex items-center">
+              <img 
+                src={process.env.NODE_ENV === 'production' ? '/portfolio-test/Contact-icons/discord-logo.png' : '/Contact-icons/discord-logo.png'} 
+                alt="Discord" 
+                className="w-[4.5rem] h-[4.5rem] md:w-[5.5rem] md:h-[5.5rem] object-contain" 
+                aria-hidden="true"
+              />
+              <span className="text-gray-300 text-sm md:text-base -ml-2 md:-ml-3">maxingking_</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-center ml-4 md:ml-8">
+            <div className="flex items-center gap-2">
+              <Mail className="w-8 h-8 md:w-9 md:h-9 text-gray-400" aria-hidden="true" />
+              <span className="text-gray-300 text-sm md:text-base">maxingkingvfx@proton.me</span>
+            </div>
           </div>
         </div>
         
-        <div className="max-w-md mx-auto animate-scale-in" style={{ animationDelay: '0.4s' }}>
+        <div className="max-w-md mx-auto">
           <button
             onClick={handleConnect}
             disabled={isConnecting}
-            className="group w-full rounded-full py-6 text-white font-medium flex items-center justify-center gap-2 text-xl md:text-2xl bg-gradient-to-r from-brand-blue via-brand-light-purple to-brand-purple relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full rounded-full py-3 text-white font-medium flex items-center justify-center gap-2 text-lg bg-gradient-to-r from-brand-blue via-brand-light-purple to-brand-purple disabled:opacity-70 disabled:cursor-not-allowed"
             aria-label="Connect on Twitter"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-blue via-brand-light-purple to-brand-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-x"></div>
-            <div className="relative z-10 flex items-center gap-2">
+            <div className="flex items-center gap-2">
               {isConnecting ? (
                 <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
               ) : (
-                <Twitter className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" aria-hidden="true" />
+                <Twitter className="h-5 w-5" aria-hidden="true" />
               )}
-              <span className="transition-transform duration-300 group-hover:-translate-y-1">
-                {isConnecting ? "Connecting..." : "Let's Contact"}
+              <span>
+                {isConnecting ? "Connecting..." : "Let's Connect"}
               </span>
             </div>
           </button>
