@@ -1,6 +1,7 @@
 import { UserRound, Users, Sparkles, HandHeart } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface Testimonial {
   id: number;
@@ -8,6 +9,10 @@ interface Testimonial {
   name: string;
   role: string;
   comment: string;
+}
+
+interface ClientsSectionProps {
+  id?: string;
 }
 
 const clients: Testimonial[] = [
@@ -41,29 +46,78 @@ const clients: Testimonial[] = [
   }
 ];
 
-const ClientsSection = () => {
+const ClientsSection: React.FC<ClientsSectionProps> = ({ id }) => {
   const [focusedTestimonial, setFocusedTestimonial] = useState<number | null>(null);
   const [hoveredTestimonial, setHoveredTestimonial] = useState<number | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const section = document.getElementById('clients');
+    if (section) {
+      observer.observe(section);
+    }
+
+    return () => {
+      if (section) {
+        observer.unobserve(section);
+      }
+    };
+  }, []);
 
   return (
-    <section id="clients" className="py-12 sm:py-20 bg-black" aria-labelledby="clients-title">
-      <div className="container mx-auto px-3 sm:px-4 md:px-8">
-        <h2 id="clients-title" className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 uppercase text-white">
+    <section 
+      id={id} 
+      className="py-12 sm:py-20 bg-black" 
+      aria-labelledby="clients-title"
+    >
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="container mx-auto px-3 sm:px-4 md:px-8"
+      >
+        <h2 
+          id="clients-title" 
+          className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 uppercase text-white"
+        >
           CLIENTS
-          <div className="w-16 h-1 bg-brand-purple mt-2"></div>
+          <div className="w-24 h-1.5 bg-brand-purple mt-2 transition-all duration-300 hover:w-32"></div>
         </h2>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-8 sm:mt-12">
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-8 sm:mt-12"
+          initial={{ opacity: 0 }}
+          animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
+        >
           {clients.map((client, index) => (
-            <div 
+            <motion.div 
               key={client.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{
+                duration: 0.5,
+                ease: "easeOut",
+                delay: index * 0.1
+              }}
               className={cn(
-                "client-card bg-opacity-10 bg-gray-800 border border-gray-800 p-4 sm:p-6 rounded-lg transition-all duration-300 animate-fade-in hover-glow",
+                "client-card bg-opacity-10 bg-gray-800 border border-gray-800 p-4 sm:p-6 rounded-lg transition-all duration-300",
                 "transform-gpu hover:scale-105 focus-within:scale-105",
                 "hover:border-brand-purple focus-within:border-brand-purple",
                 (focusedTestimonial === client.id || hoveredTestimonial === client.id) && "border-brand-purple"
               )}
-              style={{ animationDelay: `${index * 0.15}s` }}
+              style={{
+                animationDelay: `${index * 0.15}s`,
+                willChange: "transform, opacity"
+              }}
               onMouseEnter={() => setHoveredTestimonial(client.id)}
               onMouseLeave={() => setHoveredTestimonial(null)}
               tabIndex={0}
@@ -80,7 +134,10 @@ const ClientsSection = () => {
                   {client.icon}
                 </div>
                 <div>
-                  <h3 id={`client-${client.id}-name`} className="text-lg sm:text-xl font-semibold text-white glow-heading">
+                  <h3 
+                    id={`client-${client.id}-name`} 
+                    className="text-lg sm:text-xl font-semibold text-white glow-heading"
+                  >
                     {client.name}
                   </h3>
                   <p className="text-brand-light-purple text-xs sm:text-sm">
@@ -96,10 +153,10 @@ const ClientsSection = () => {
                   "{client.comment}"
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };

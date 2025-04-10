@@ -16,11 +16,11 @@ const Index: FC<IndexProps> = () => {
     <div className="min-h-screen bg-brand-deepest-blue text-white">
       <Navbar />
       <main className="flex flex-col">
-        <Hero />
-        <WorkSection />
-        <ServicesSection />
-        <ClientsSection />
-        <ContactSection />
+        <Hero id="hero" />
+        <WorkSection id="work" />
+        <ServicesSection id="services" />
+        <ClientsSection id="clients" />
+        <ContactSection id="contact" />
       </main>
       <Footer />
     </div>

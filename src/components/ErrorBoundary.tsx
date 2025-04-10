@@ -34,10 +34,11 @@ class ErrorBoundary extends Component<Props, State> {
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">Something went wrong</h2>
             <p className="mb-4">Please try refreshing the page.</p>
             <button
-              className="bg-brand-primary px-8 py-4 sm:py-3 text-lg sm:text-xl rounded-lg hover:bg-brand-primary-dark transition-colors duration-300 w-full shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="group rounded-full px-8 py-6 text-white font-medium flex items-center gap-2 justify-center bg-gradient-to-r from-brand-blue via-brand-light-purple to-brand-purple relative overflow-hidden transition-all duration-300 text-xl hover:shadow-lg hover:shadow-purple-500/20 w-full"
               onClick={() => window.location.reload()}
             >
-              Try Again
+              <div className="absolute inset-0 bg-gradient-to-r from-brand-blue via-brand-light-purple to-brand-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-x"></div>
+              <div className="relative z-10">Try Again</div>
             </button>
           </div>
         </div>
