@@ -20,7 +20,7 @@ const Hero = () => {
         aria-hidden="true"
       >
         <img
-          src="/Background-image/timeline-editing.png"
+          src="/portfolio/Background-image/timeline-editing.png"
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
           style={{ 
