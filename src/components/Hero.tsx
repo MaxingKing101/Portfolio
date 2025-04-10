@@ -20,7 +20,7 @@ const Hero = () => {
         aria-hidden="true"
       >
         <img
-          src="/portfolio/Background-image/timeline-editing.png"
+          src={`${process.env.NODE_ENV === 'production' ? '/portfolio' : ''}/Background-image/timeline-editing.png`}
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
           style={{ 
