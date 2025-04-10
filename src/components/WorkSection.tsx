@@ -7,6 +7,7 @@ interface Project {
   category: string;
   imageUrl: string;
   videoUrl?: string;
+  vimeoEmbed?: string;
 }
 
 const projects: Project[] = [
@@ -15,7 +16,7 @@ const projects: Project[] = [
     title: "Code Portfolio",
     category: "Programming",
     imageUrl: "/lovable-uploads/df40c52e-74b2-405e-8bf3-b4da4fbe1436.png",
-    videoUrl: "https://www.youtube.com/watch?v=example1"
+    vimeoEmbed: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1074265085?h=495fb1c813&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Bellabo_ContentHighlights_Final\"></iframe></div>"
   },
   {
     id: 2,
@@ -155,13 +156,17 @@ const WorkSection = () => {
                 </button>
               </div>
               <div className="aspect-video bg-black rounded-lg mb-4 overflow-hidden">
-                <img 
-                  src={selectedProject.imageUrl} 
-                  alt={selectedProject.title}
-                  className="w-full h-full object-cover"
-                  width={1280}
-                  height={720}
-                />
+                {selectedProject.vimeoEmbed ? (
+                  <div dangerouslySetInnerHTML={{ __html: selectedProject.vimeoEmbed }} />
+                ) : (
+                  <img 
+                    src={selectedProject.imageUrl} 
+                    alt={selectedProject.title}
+                    className="w-full h-full object-cover"
+                    width={1280}
+                    height={720}
+                  />
+                )}
               </div>
               <div className="text-gray-300">
                 <p className="mb-2"><strong>Category:</strong> {selectedProject.category}</p>
