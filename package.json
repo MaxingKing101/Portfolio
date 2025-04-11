@@ -9,10 +9,12 @@
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
+    "build:cf": "bun build",
     "lint": "eslint .",
     "preview": "vite preview",
     "type-check": "tsc --build --force",
     "deploy": "npm run build && gh-pages -d dist -b gh-pages -r https://github.com/maxingkingvfx/portfolio.git",
+    "deploy:cf": "npm run build:cf",
     "lint:fix": "eslint . --fix --cache --cache-location ./node_modules/.cache/eslint/"
   },
   "dependencies": {

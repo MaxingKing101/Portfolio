@@ -1,16 +1,14 @@
 name = "maxingkingvfx"
-main = "./index.html"
 
 [build]
-command = "npm run build"
+command = "npm run build:cf"
 
 [build.output]
 directory = "dist"
 
-# Add environment variables for different deployments
 [env.production]
 [env.production.build]
-command = "npm run build"
+command = "npm run build:cf"
 
 [env.github]
 [env.github.build]
@@ -21,7 +19,10 @@ directory = "dist"
 
 [env.cloudflare]
 [env.cloudflare.build]
-command = "npm run build"
+command = "npm run build:cf"
 
 [env.cloudflare.build.output]
 directory = "dist"
+
+[env.cloudflare.branch]
+name = "main"
