@@ -1,0 +1,13 @@
+name = "maxingkingvfx"
+main = "vite.config.js"
+compatibility_date = "2025-04-11"
+
+[build]
+command = "npm run build"
+
+[build.upload]
+target = "dist"
+
+[site]
+bucket = "dist"
+entry-point = "index.html"
