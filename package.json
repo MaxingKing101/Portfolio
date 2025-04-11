@@ -9,6 +9,7 @@
     "dev": "vite",
     "build": "npm install && vite build",
     "build:dev": "vite build --mode development",
+    "build:cloudflare": "npm run build && cp cloudflare.toml wrangler.toml",
     "lint": "eslint .",
     "preview": "vite preview",
     "type-check": "tsc --build --force",

@@ -1,6 +1,4 @@
 name = "maxingkingvfx"
-main = "vite.config.js"
-compatibility_date = "2025-04-11"
 
 [build]
 command = "npm run build"
