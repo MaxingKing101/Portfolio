@@ -5,7 +5,8 @@ import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => {
   const isProduction = mode === 'production';
-  const base = isProduction ? '/portfolio/' : '/'; // Use '/portfolio/' for GitHub Pages, '/' for local dev
+  // Use '/portfolio/' for GitHub Pages, '/' for Cloudflare Pages and local dev
+  const base = process.env.CLOUDFLARE_PAGES ? '/' : (isProduction ? '/portfolio/' : '/');
 
   return {
     base,
