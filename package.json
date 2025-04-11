@@ -1,6 +1,7 @@
 {
   "name": "vite_react_shadcn_ts",
   "homepage": "https://maxingkingvfx.github.io/portfolio/",
+  "cloudflare_homepage": "https://maxingkingvfx.pages.dev",
   "private": true,
   "version": "0.0.0",
   "type": "module",
