@@ -38,7 +38,7 @@ const Hero: React.FC<HeroProps> = ({ id }) => {
         }}
       >
         <motion.img
-          src={`${process.env.NODE_ENV === 'production' ? '/portfolio' : ''}/Background-image/timeline-editing.png`}
+          src="/Background-image/timeline-editing.png"
           alt="Enhance Your Content"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ 
