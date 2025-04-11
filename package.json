@@ -11,9 +11,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "type-check": "tsc --build --force",
-    "predeploy": "npm run build",
-    "lint:fix": "eslint . --fix --cache --cache-location ./node_modules/.cache/eslint/",
-    "deploy": "gh-pages -d dist -b gh-pages -r https://github.com/maxingkingvfx/portfolio.git"
+    "deploy": "npm run build && gh-pages -d dist -b gh-pages -r https://github.com/maxingkingvfx/portfolio.git",
+    "lint:fix": "eslint . --fix --cache --cache-location ./node_modules/.cache/eslint/"
   },
   "dependencies": {
     "@emotion/babel-plugin": "^11.13.5",
