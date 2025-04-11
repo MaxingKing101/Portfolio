@@ -83,7 +83,10 @@ const rankProjects = (projects: Project[], customRanking?: { [id: number]: numbe
   const defaultRanking: { [id: number]: number } = {
     1: 1, // ZBRA
     2: 2, // Bellaboo OW
-    5: 3  // Matrix Code
+    3: 3, // UnsaltedSalt
+    4: 4, // Placeholder for future project
+    5: 5, // Placeholder for future project
+    6: 6  // Placeholder for future project
   };
 
   // Merge custom ranking with defaults
@@ -93,7 +96,7 @@ const rankProjects = (projects: Project[], customRanking?: { [id: number]: numbe
     const rankA = ranking[a.id] ?? a.id;
     const rankB = ranking[b.id] ?? b.id;
     return rankA - rankB;
-  });
+  }).slice(0, 6); // Limit to 6 cards
 };
 
 // Project configuration
@@ -128,72 +131,20 @@ const projectConfig: { [id: number]: Project } = {
     editingTechniques: ["Color Grading", "SFX", "Visual Effects", "Equalization"],
     id: 2
   },
-  5: {
+  3: {
     title: "UnsaltedSalt",
     videoTitle: "This is WHY R.E.P.O. is The BEST Extraction Game",
     category: ProjectCategory.Gaming,
     subCategory: GamingSubCategory.RecentWorks,
     imageUrl: "https://i.ibb.co/Y4NY0wpT/thumb.jpg",
     videoType: "vimeo",
-    videoId: "1074646889",
-    videoHash: "934d53e02c",
+    videoId: "1074652341",
+    videoHash: "fb04a95288",
     thumbnailUrl: "https://i.ibb.co/7N6c6yFR/REPO.png",
     duration: "0:58",
     description: "Content Highlights for UnsaltedSalt R.E.P.O's gameplay",
     editingTechniques: ["Color Grading", "SFX", "Transitions", "Equalization", "POV"],
-    id: 5
-  },
-  4: {
-    title: "Hardware Integration",
-    category: ProjectCategory.ShortForm,
-    subCategory: ShortFormSubCategory.RecentWorks,
-    imageUrl: "/lovable-uploads/df40c52e-74b2-405e-8bf3-b4da4fbe1436.png",
-    videoType: "none",
-    duration: "4:12",
-    description: "A concise case study video explaining hardware integration with clear visual aids and process flow animations.",
-    editingTechniques: ["Process Flow Animation", "Data Visualization", "Screen Capture", "Voiceover Editing"],
-    clientTestimonial: "The video editing was exceptional, making complex coding concepts accessible to learners.",
-    clientName: "Coding Academy",
-    id: 4
-  },
-  6: {
-    title: "Advanced Coding",
-    category: ProjectCategory.ShortForm,
-    subCategory: ShortFormSubCategory.ReEdits,
-    imageUrl: "/lovable-uploads/9a096096-b125-4e73-9440-c8796fbc36fe.png",
-    videoType: "none",
-    duration: "3:28",
-    description: "A re-edited version of a coding tutorial with improved pacing and visual explanations.",
-    editingTechniques: ["Motion Graphics", "Screen Capture", "Voiceover Editing", "Color Grading"],
-    clientTestimonial: "The re-edited version was much more engaging and easier to follow.",
-    clientName: "Tech Educators",
-    id: 6
-  },
-  3: {
-    title: "DevOps Project",
-    category: ProjectCategory.LongForm,
-    subCategory: LongFormSubCategory.RecentWorks,
-    imageUrl: "/lovable-uploads/9a096096-b125-4e73-9440-c8796fbc36fe.png",
-    videoType: "none",
-    duration: "2:30",
-    description: "A comprehensive case study on implementing DevOps practices in a large organization.",
-    editingTechniques: ["Process Flow Animation", "Data Visualization", "Screen Capture", "Voiceover Editing"],
-    clientTestimonial: "The video provided clear insights into our DevOps transformation journey.",
-    clientName: "Cloud Services",
     id: 3
-  },
-  7: {
-    title: "Cloud Migration",
-    category: ProjectCategory.LongForm,
-    subCategory: LongFormSubCategory.ReEdits,
-    imageUrl: "/lovable-uploads/9a096096-b125-4e73-9440-c8796fbc36fe.png",
-    videoType: "none",
-    duration: "4:15",
-    description: "A re-edited version of a cloud migration case study with improved clarity and pacing.",
-    editingTechniques: ["Motion Graphics", "Screen Capture", "Voiceover Editing", "Color Grading"],
-    clientTestimonial: "The re-edited version made our cloud migration story much more compelling.",
-    clientName: "Enterprise Solutions",
-    id: 7
   }
 };
 
@@ -406,7 +357,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
       aria-label="Work portfolio"
     >
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-white glow-heading">
+        <h2 className="text-5xl sm:text-6xl font-bold text-center mb-12 text-white glow-heading">
           My Work
         </h2>
         
@@ -418,7 +369,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                 setFilter('all');
                 setSubCategory('');
               }}
-              className={`px-4 py-2 rounded-full text-sm font-medium ${
+              className={`px-6 py-3 rounded-full text-base font-medium ${
                 filter === 'all' ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
               }`}
               aria-current={filter === 'all' ? 'page' : undefined}
@@ -437,7 +388,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                       setSubCategory('');
                     }
                   }}
-                  className={`px-4 py-2 rounded-full text-sm font-medium ${
+                  className={`px-6 py-3 rounded-full text-base font-medium ${
                     filter === category ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
                   }`}
                   aria-current={filter === category ? 'page' : undefined}
@@ -456,7 +407,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                           setSubCategory(GamingSubCategory.RecentWorks);
                         }
                       }}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                      className={`px-6 py-3 rounded-full text-base font-medium ${
                         subCategory === GamingSubCategory.RecentWorks ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
                       }`}
                     >
@@ -470,7 +421,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                           setSubCategory(GamingSubCategory.ReEdits);
                         }
                       }}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                      className={`px-6 py-3 rounded-full text-base font-medium ${
                         subCategory === GamingSubCategory.ReEdits ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
                       }`}
                     >
@@ -490,7 +441,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                           setSubCategory(LongFormSubCategory.RecentWorks);
                         }
                       }}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                      className={`px-6 py-3 rounded-full text-base font-medium ${
                         subCategory === LongFormSubCategory.RecentWorks ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
                       }`}
                     >
@@ -504,7 +455,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                           setSubCategory(LongFormSubCategory.ReEdits);
                         }
                       }}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                      className={`px-6 py-3 rounded-full text-base font-medium ${
                         subCategory === LongFormSubCategory.ReEdits ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
                       }`}
                     >
@@ -524,7 +475,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                           setSubCategory(ShortFormSubCategory.RecentWorks);
                         }
                       }}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                      className={`px-6 py-3 rounded-full text-base font-medium ${
                         subCategory === ShortFormSubCategory.RecentWorks ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
                       }`}
                     >
@@ -538,7 +489,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                           setSubCategory(ShortFormSubCategory.ReEdits);
                         }
                       }}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                      className={`px-6 py-3 rounded-full text-base font-medium ${
                         subCategory === ShortFormSubCategory.ReEdits ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
                       }`}
                     >
