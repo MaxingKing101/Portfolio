@@ -8,6 +8,10 @@ command = "npm run build"
 [build.upload]
 target = "dist"
 
+[pages]
+build_command = "npm run build"
+build_output_directory = "dist"
+
 [site]
 bucket = "dist"
 entry-point = "index.html"
