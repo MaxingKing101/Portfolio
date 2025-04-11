@@ -108,7 +108,7 @@ const Navbar = () => {
               key={item.id}
               onClick={() => scrollToSection(item.id)} 
               className={cn(
-                "text-white hover:text-brand-light-purple transition-colors duration-300 ease-in-out text-sm sm:text-base px-1 sm:px-2 py-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple",
+                "text-white hover:text-brand-light-purple transition-colors duration-300 ease-in-out text-xs sm:text-sm md:text-base px-2 sm:px-3 md:px-4 py-1.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple",
                 activeSection === item.id && "text-brand-light-purple"
               )}
               role="menuitem"
@@ -126,10 +126,10 @@ const Navbar = () => {
       {showBackToTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-13 sm:bottom-13 right-4 sm:right-10 h-8 w-8 sm:h-10 sm:w-14 flex items-center justify-center bg-brand-purple text-white rounded-md shadow-lg hover:bg-brand-light-purple transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2"
+          className="fixed bottom-13 sm:bottom-13 right-4 sm:right-10 h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center bg-brand-purple text-white rounded-md shadow-lg hover:bg-brand-light-purple transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2"
           aria-label="Scroll back to top"
         >
-          <ChevronUp className="h-5 w-5 sm:h-8 sm:w-8 transition-all duration-300 ease-in-out group-hover:rotate-180" aria-hidden="true" />
+          <ChevronUp className="h-5 w-5 sm:h-6 sm:w-6 transition-all duration-300 ease-in-out group-hover:rotate-180" aria-hidden="true" />
         </button>
       )}
     </nav>

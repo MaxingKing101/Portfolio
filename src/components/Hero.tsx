@@ -72,7 +72,7 @@ const Hero: React.FC<HeroProps> = ({ id }) => {
       >
         <motion.h1 
           id="hero-title" 
-          className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight"
+          className="text-3xl md:text-4xl lg:text-6xl font-bold mb-6 md:mb-8 leading-tight"
           initial={{ 
             opacity: 0, 
             y: 20,
@@ -92,7 +92,7 @@ const Hero: React.FC<HeroProps> = ({ id }) => {
           It's Time To <span className="enhance-text">ENHANCE</span> Your Content
         </motion.h1>
         <motion.p 
-          className="text-lg md:text-xl text-gray-300 mb-12"
+          className="text-base md:text-lg lg:text-xl text-gray-300 mb-8 md:mb-12"
           initial={{ 
             opacity: 0, 
             y: 20,
@@ -122,15 +122,15 @@ const Hero: React.FC<HeroProps> = ({ id }) => {
           }}
         >
           <a 
-            href="https://twitter.com/maxingking101" 
+            href="https://x.com/MaxingKingVFX" 
             target="_blank"
             rel="noopener noreferrer"
-            className="group rounded-full px-8 py-6 text-white font-medium flex items-center gap-2 justify-center bg-gradient-to-r from-brand-blue via-brand-light-purple to-brand-purple relative overflow-hidden transition-all duration-300 text-xl hover:shadow-lg hover:shadow-purple-500/20"
+            className="group rounded-full px-6 py-4 md:px-8 md:py-6 text-white font-medium flex items-center gap-2 justify-center bg-gradient-to-r from-brand-blue via-brand-light-purple to-brand-purple relative overflow-hidden transition-all duration-300 text-lg md:text-xl hover:shadow-lg hover:shadow-purple-500/20"
             aria-label="Connect on Twitter"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-brand-blue via-brand-light-purple to-brand-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-x"></div>
             <div className="relative z-10 flex items-center gap-2">
-              <Twitter className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" aria-hidden="true" /> 
+              <Twitter className="h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" aria-hidden="true" /> 
               <span className="transition-transform duration-300 group-hover:-translate-y-1">Let's Talk</span>
             </div>
           </a>
@@ -145,11 +145,11 @@ const Hero: React.FC<HeroProps> = ({ id }) => {
               }
             }}
             variant="outline" 
-            className="group rounded-full px-8 py-6 border-gray-700 hover:bg-transparent text-white font-medium flex items-center gap-2 relative overflow-hidden transition-all duration-300"
+            className="group rounded-full px-6 py-4 md:px-8 md:py-6 border-gray-700 hover:bg-transparent text-white font-medium flex items-center gap-2 relative overflow-hidden transition-all duration-300"
             aria-label="View portfolio work"
           >
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-brand-blue/10 via-brand-light-purple/10 to-brand-purple/10"></div>
-            <Play className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" /> 
+            <Play className="h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" /> 
             <span className="transition-transform duration-300 group-hover:translate-x-1">Watch My Work</span>
           </Button>
         </motion.div>

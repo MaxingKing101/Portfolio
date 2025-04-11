@@ -16,7 +16,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
     // Simulate connection delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     setIsConnecting(false);
-    window.open("https://twitter.com/maxingking101", "_blank");
+    window.open("https://x.com/MaxingKingVFX", "_blank");
   };
 
   return (
@@ -61,7 +61,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
           
           <div className="flex items-center justify-center ml-4 md:ml-6">
             <a 
-              href="https://twitter.com/maxingking101" 
+              href="https://x.com/MaxingKingVFX" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center text-gray-400 hover:text-brand-purple transition-colors p-2"

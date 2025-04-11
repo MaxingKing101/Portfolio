@@ -1,8 +1,6 @@
 import { Instagram, Twitter, Youtube, Mail, ExternalLink } from 'lucide-react';
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-  
   const socialLinks = [
     {
       name: 'Instagram',
@@ -13,7 +11,7 @@ const Footer = () => {
     {
       name: 'Twitter',
       icon: <Twitter size={18} />,
-      url: 'https://twitter.com/maxingking101',
+      url: 'https://x.com/MaxingKingVFX',
       color: 'hover:text-blue-400'
     },
     {
@@ -28,9 +26,6 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
-            <p className="text-gray-400 animate-fade-in">
-              © {currentYear} MaxingKing. All rights reserved.
-            </p>
           </div>
           
           <nav 
@@ -38,7 +33,7 @@ const Footer = () => {
             style={{ animationDelay: '0.2s' }}
             aria-label="Social media links"
           >
-            {socialLinks.map((link, index) => 
+            {socialLinks.map((link) => 
               link.url ? (
                 <a
                   key={link.name}

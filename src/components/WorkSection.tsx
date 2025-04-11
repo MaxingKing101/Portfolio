@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback, memo } from 'react';
+import { useEffect, useState, useRef, useCallback, memo, useMemo } from 'react';
 import { Loader2, Play } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -6,26 +6,57 @@ import { useInView } from 'react-intersection-observer';
 // Interfaces
 interface Project {
   id: number;
-  title: string;
-  category: string;
+  title: string; // Main title for the card
+  videoTitle?: string; // Optional title for the video content
+  category: ProjectCategory;
+  subCategory?: GamingSubCategory | ShortFormSubCategory | LongFormSubCategory;
   imageUrl: string;
   videoType?: 'vimeo' | 'youtube' | 'none';
   videoId?: string;
   videoHash?: string;
   thumbnailUrl?: string;
+  duration?: string; // Format: "2:30" or "1:20:45"
+  description: string;
+  editingTechniques: string[];
+  clientTestimonial?: string;
+  clientName?: string;
 }
 
 interface WorkSectionProps {
   id?: string;
 }
 
+// Category Types
+export enum ProjectCategory {
+  Gaming = 'Gaming',
+  LongForm = 'Long-form',
+  ShortForm = 'Short-form'
+}
+
+export enum GamingSubCategory {
+  RecentWorks = 'Recent works',
+  ReEdits = 'Re-edits'
+}
+
+export enum ShortFormSubCategory {
+  RecentWorks = 'Recent works',
+  ReEdits = 'Re-edits'
+}
+
+export enum LongFormSubCategory {
+  RecentWorks = 'Recent works',
+  ReEdits = 'Re-edits'
+}
+
 // Constants
 const themeVars = {
-  '--card-hover-bg': 'rgba(255, 255, 255, 0.05)',
-  '--card-hover-scale': '1.02',
-  '--gradient-start': '#1a1a1a',
-  '--gradient-end': '#0a0a0a',
-  '--transition-duration': '0.3s',
+  '--card-hover-bg': 'rgba(255, 255, 255, 0.1)',
+  '--card-hover-scale': '1.03',
+  '--gradient-start': '#2a2a2a',
+  '--gradient-end': '#1a1a1a',
+  '--transition-duration': '0.4s',
+  '--card-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  '--card-shadow-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
 } as const;
 
 // Helper functions
@@ -35,76 +66,162 @@ const getVideoThumbnail = (project: Project): string => {
 
 const getVideoEmbedUrl = (project: Project, autoplay: boolean = false): string => {
   if (project.videoType === 'vimeo' && project.videoId) {
-    const autoplayParam = autoplay ? '&autoplay=1' : '';
+    const autoplayParam = autoplay ? '&autoplay=1&autopause=0' : '';
     const hashParam = project.videoHash ? `h=${project.videoHash}` : '';
-    return `https://player.vimeo.com/video/${project.videoId}?${hashParam}&title=0&byline=0&portrait=0&badge=0&autopause=0&dnt=1&responsive=1&quality=auto${autoplayParam}`;
+    return `https://player.vimeo.com/video/${project.videoId}?${hashParam}&title=0&byline=0&portrait=0&badge=0&dnt=1&responsive=1&quality=auto${autoplayParam}`;
   }
   if (project.videoType === 'youtube' && project.videoId) {
-    const autoplayParam = autoplay ? '&autoplay=1' : '';
+    const autoplayParam = autoplay ? '&autoplay=1&mute=1' : '';
     return `https://www.youtube.com/embed/${project.videoId}?rel=0&showinfo=0${autoplayParam}`;
   }
   return '';
 };
 
-// Static data
-const projects: Project[] = [
-  {
-    id: 1,
-    title: "Code Portfolio",
-    category: "Programming",
-    imageUrl: "/lovable-uploads/df40c52e-74b2-405e-8bf3-b4da4fbe1436.png",
-    videoType: "vimeo",
-    videoId: "1074265085",
-    videoHash: "495fb1c813",
-    thumbnailUrl: "https://i.ibb.co/My2NsbBr/thumb.jpg"
-  },
-  {
-    id: 2,
-    title: "Web Development",
-    category: "Coding",
-    imageUrl: "/lovable-uploads/311b60eb-ab56-4371-9a27-acc2a62a5223.png",
+// Project ranking utility
+const rankProjects = (projects: Project[], customRanking?: { [id: number]: number }): Project[] => {
+  // Default ranking configuration
+  const defaultRanking: { [id: number]: number } = {
+    1: 1, // ZBRA
+    2: 2, // Bellaboo OW
+    5: 3  // Matrix Code
+  };
+
+  // Merge custom ranking with defaults
+  const ranking = customRanking ? { ...defaultRanking, ...customRanking } : defaultRanking;
+
+  return [...projects].sort((a, b) => {
+    const rankA = ranking[a.id] ?? a.id;
+    const rankB = ranking[b.id] ?? b.id;
+    return rankA - rankB;
+  });
+};
+
+// Project configuration
+const projectConfig: { [id: number]: Project } = {
+  1: {
+    title: "ZBRA",
+    videoTitle: "Fine, I'll Do It Myself.",
+    category: ProjectCategory.Gaming,
+    subCategory: GamingSubCategory.ReEdits,
+    imageUrl: "https://i.ibb.co/0jjgJ7T0/thumb-1.jpg",
     videoType: "vimeo",
     videoId: "1074270789",
     videoHash: "8538c1e45e",
-    thumbnailUrl: "https://i.ibb.co/0jjgJ7T0/thumb-1.jpg"
+    thumbnailUrl: "https://i.ibb.co/GfKvBsKb/a98525a4-563d-4e02-b78a-143e815ee444.jpg",
+    duration: "0:55",
+    description: "If I edited ZBRA's video",
+    editingTechniques: ["Color Grading", "SFX", "Voice lines", "Equalization"],
+    id: 1
   },
-  {
-    id: 3,
-    title: "DevOps Project",
-    category: "Technology",
-    imageUrl: "/lovable-uploads/9a096096-b125-4e73-9440-c8796fbc36fe.png",
-    videoType: "none"
+  2: {
+    title: "Bellaboo OW",
+    videoTitle: "This Wrecking Ball Perk is Actually BROKEN!",
+    category: ProjectCategory.Gaming,
+    subCategory: GamingSubCategory.ReEdits,
+    imageUrl: "https://i.ibb.co/My2NsbBr/thumb.jpg",
+    videoType: "vimeo",
+    videoId: "1074265085",
+    videoHash: "495fb1c813",
+    thumbnailUrl: "https://i.ibb.co/HDZL4ZH7/pgq5w-Wy-KFl-E-HD.jpg",
+    duration: "0:27",
+    description: "If I was Bellaboo's Editor",
+    editingTechniques: ["Color Grading", "SFX", "Visual Effects", "Equalization"],
+    id: 2
   },
-  {
-    id: 4,
+  5: {
+    title: "UnsaltedSalt",
+    videoTitle: "This is WHY R.E.P.O. is The BEST Extraction Game",
+    category: ProjectCategory.Gaming,
+    subCategory: GamingSubCategory.RecentWorks,
+    imageUrl: "https://i.ibb.co/Y4NY0wpT/thumb.jpg",
+    videoType: "vimeo",
+    videoId: "1074646889",
+    videoHash: "934d53e02c",
+    thumbnailUrl: "https://i.ibb.co/7N6c6yFR/REPO.png",
+    duration: "0:58",
+    description: "Content Highlights for UnsaltedSalt R.E.P.O's gameplay",
+    editingTechniques: ["Color Grading", "SFX", "Transitions", "Equalization", "POV"],
+    id: 5
+  },
+  4: {
     title: "Hardware Integration",
-    category: "Engineering",
+    category: ProjectCategory.ShortForm,
+    subCategory: ShortFormSubCategory.RecentWorks,
     imageUrl: "/lovable-uploads/df40c52e-74b2-405e-8bf3-b4da4fbe1436.png",
-    videoType: "none"
+    videoType: "none",
+    duration: "4:12",
+    description: "A concise case study video explaining hardware integration with clear visual aids and process flow animations.",
+    editingTechniques: ["Process Flow Animation", "Data Visualization", "Screen Capture", "Voiceover Editing"],
+    clientTestimonial: "The video editing was exceptional, making complex coding concepts accessible to learners.",
+    clientName: "Coding Academy",
+    id: 4
   },
-  {
-    id: 5,
-    title: "Matrix Code",
-    category: "Programming",
-    imageUrl: "/lovable-uploads/311b60eb-ab56-4371-9a27-acc2a62a5223.png",
-    videoType: "none"
-  },
-  {
-    id: 6,
+  6: {
     title: "Advanced Coding",
-    category: "Development",
+    category: ProjectCategory.ShortForm,
+    subCategory: ShortFormSubCategory.ReEdits,
     imageUrl: "/lovable-uploads/9a096096-b125-4e73-9440-c8796fbc36fe.png",
-    videoType: "none"
+    videoType: "none",
+    duration: "3:28",
+    description: "A re-edited version of a coding tutorial with improved pacing and visual explanations.",
+    editingTechniques: ["Motion Graphics", "Screen Capture", "Voiceover Editing", "Color Grading"],
+    clientTestimonial: "The re-edited version was much more engaging and easier to follow.",
+    clientName: "Tech Educators",
+    id: 6
   },
-];
+  3: {
+    title: "DevOps Project",
+    category: ProjectCategory.LongForm,
+    subCategory: LongFormSubCategory.RecentWorks,
+    imageUrl: "/lovable-uploads/9a096096-b125-4e73-9440-c8796fbc36fe.png",
+    videoType: "none",
+    duration: "2:30",
+    description: "A comprehensive case study on implementing DevOps practices in a large organization.",
+    editingTechniques: ["Process Flow Animation", "Data Visualization", "Screen Capture", "Voiceover Editing"],
+    clientTestimonial: "The video provided clear insights into our DevOps transformation journey.",
+    clientName: "Cloud Services",
+    id: 3
+  },
+  7: {
+    title: "Cloud Migration",
+    category: ProjectCategory.LongForm,
+    subCategory: LongFormSubCategory.ReEdits,
+    imageUrl: "/lovable-uploads/9a096096-b125-4e73-9440-c8796fbc36fe.png",
+    videoType: "none",
+    duration: "4:15",
+    description: "A re-edited version of a cloud migration case study with improved clarity and pacing.",
+    editingTechniques: ["Motion Graphics", "Screen Capture", "Voiceover Editing", "Color Grading"],
+    clientTestimonial: "The re-edited version made our cloud migration story much more compelling.",
+    clientName: "Enterprise Solutions",
+    id: 7
+  }
+};
+
+// Get all projects from config
+const gamingProjects: Project[] = Object.values(projectConfig).filter(
+  project => project.category === ProjectCategory.Gaming
+);
+
+const shortFormProjects: Project[] = Object.values(projectConfig).filter(
+  project => project.category === ProjectCategory.ShortForm
+);
+
+const longFormProjects: Project[] = Object.values(projectConfig).filter(
+  project => project.category === ProjectCategory.LongForm
+);
+
+// Combine and sort projects
+const projects: Project[] = rankProjects([...gamingProjects, ...shortFormProjects, ...longFormProjects]);
 
 // Components
-const ProjectCard = memo(({ project, onProjectClick, isLoading, onImageLoad }: {
+interface ProjectCardProps {
   project: Project;
   onProjectClick: (project: Project) => void;
   isLoading: boolean;
-  onImageLoad: (projectId: number) => void;
-}) => {
+  onImageLoad: () => void;
+}
+
+const ProjectCard = memo(({ project, onProjectClick, isLoading, onImageLoad }: ProjectCardProps) => {
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
@@ -130,6 +247,11 @@ const ProjectCard = memo(({ project, onProjectClick, isLoading, onImageLoad }: {
         '--gradient-end': themeVars['--gradient-end'],
         '--transition-duration': themeVars['--transition-duration'],
       } as React.CSSProperties}
+      whileHover={{
+        scale: 1.02,
+        transition: { duration: 0.3, ease: "easeInOut" }
+      }}
+      whileTap={{ scale: 0.98 }}
     >
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
@@ -138,43 +260,61 @@ const ProjectCard = memo(({ project, onProjectClick, isLoading, onImageLoad }: {
       )}
       <img 
         src={project.imageUrl} 
-        alt={project.title}
-        className="w-full h-48 sm:h-64 object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-        loading="lazy"
-        onLoad={() => onImageLoad(project.id)}
-        width={400}
-        height={256}
+        alt={`${project.title} project`}
+        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+        onLoad={onImageLoad}
       />
-      <div className="absolute bottom-0 left-0 right-0 h-[5%] bg-gradient-to-t from-[var(--gradient-start)] via-[var(--gradient-end)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-        <div className="p-4 w-full">
-          <h3 className="text-xl font-semibold text-white glow-heading transition-colors duration-300 group-hover:text-brand-purple">{project.title}</h3>
-          <p className="text-sm text-gray-300 transition-colors duration-300 group-hover:text-white">{project.category}</p>
-        </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 flex flex-col justify-end p-4">
+        <motion.p 
+          className="text-sm text-gray-300 transition-colors duration-300 group-hover:text-white"
+          initial={{ y: 0, opacity: 1 }}
+        >
+          {project.category}
+        </motion.p>
+        <motion.h3 
+          className="text-lg font-semibold text-white mt-2 glow-heading"
+          initial={{ y: 0, opacity: 1 }}
+        >
+          {project.title}
+        </motion.h3>
       </div>
     </motion.div>
   );
 });
 
-const VideoPlayer = memo(({ project, isLoading, onLoad }: {
+interface VideoPlayerProps {
   project: Project;
   isLoading: boolean;
   onLoad: () => void;
-}) => {
+}
+
+const VideoPlayer = memo(({ project, isLoading, onLoad }: VideoPlayerProps) => {
+  const handleLoad = useCallback(() => {
+    onLoad();
+  }, [onLoad]);
+
+  const handleError = useCallback((error: any) => {
+    console.error('Video player error:', error);
+  }, []);
+
   return (
     <div className="relative w-full h-full">
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/80">
           <Loader2 className="w-8 h-8 animate-spin text-brand-purple" />
         </div>
       )}
+      
       <iframe
         src={getVideoEmbedUrl(project, true)}
-        className="w-full h-full rounded-lg"
+        className="w-full h-full"
         frameBorder="0" 
         allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" 
         allowFullScreen
         title={project.title}
-        onLoad={onLoad}
+        onLoad={handleLoad}
+        onError={handleError}
+        aria-label={`${project.title} video player`}
       />
     </div>
   );
@@ -182,22 +322,37 @@ const VideoPlayer = memo(({ project, isLoading, onLoad }: {
 
 const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [loadingImages, setLoadingImages] = useState<Set<number>>(new Set());
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [loadingVideo, setLoadingVideo] = useState(false);
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const [filter, setFilter] = useState<ProjectCategory | 'all'>('all');
+  const [subCategory, setSubCategory] = useState<string>('');
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const filteredProjects = useMemo(() => {
+    if (filter === 'all') return projects;
+
+    let filtered = projects.filter(project => 
+      project.category === filter
+    );
+
+    if (subCategory) {
+      filtered = filtered.filter(project => {
+        if (project.category === ProjectCategory.Gaming) {
+          return project.subCategory === subCategory;
+        } else if (project.category === ProjectCategory.ShortForm) {
+          return project.subCategory === subCategory;
+        } else if (project.category === ProjectCategory.LongForm) {
+          return project.subCategory === subCategory;
+        }
+        return true;
+      });
+    }
+
+    return filtered;
+  }, [filter, subCategory, projects]);
 
   const handleProjectClick = useCallback((project: Project) => {
     setSelectedProject(project);
-  }, []);
-
-  const handleImageLoad = useCallback((projectId: number) => {
-    setLoadingImages((prev) => {
-      const newSet = new Set(prev);
-      newSet.delete(projectId);
-      return newSet;
-    });
   }, []);
 
   const closeModal = useCallback(() => {
@@ -205,163 +360,388 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
     setVideoPlaying(false);
   }, []);
 
-  const handleVideoPlay = useCallback(() => {
-    setVideoPlaying(true);
-  }, []);
-
-  const handleDivKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>): void => {
+  const handleDocumentKeyDown = useCallback((event: KeyboardEvent): void => {
     if (event.key === 'Escape') {
       closeModal();
     }
   }, [closeModal]);
 
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (overlayRef.current && !overlayRef.current.contains(event.target as Node)) {
+  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key === 'Escape') {
       closeModal();
     }
   }, [closeModal]);
 
   useEffect(() => {
-    const handleDocumentKeyDown = (event: KeyboardEvent): void => {
-      if (event.key === 'Escape') {
-        closeModal();
-      }
-    };
-
     document.addEventListener('keydown', handleDocumentKeyDown);
     return () => {
       document.removeEventListener('keydown', handleDocumentKeyDown);
     };
-  }, [closeModal]);
+  }, [handleDocumentKeyDown]);
+
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      closeModal();
+    }
+  }, [closeModal, modalRef]);
 
   useEffect(() => {
-    const handleClick = (event: MouseEvent) => handleClickOutside(event);
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [handleClickOutside]);
+    if (selectedProject) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [selectedProject, closeModal]);
+
+  const handleImageLoad = useCallback(() => {
+    setLoadingVideo(false);
+  }, []);
 
   return (
-    <section id={id} className="py-20 sm:py-24 relative overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 glow-heading">
-            My Work
-          </h2>
-          <p className="text-gray-300 max-w-2xl mx-auto">
-            Explore my portfolio of projects showcasing my skills and expertise.
-          </p>
+    <section 
+      id={id}
+      className="py-16 px-4 sm:px-6 lg:px-8 min-h-screen"
+      aria-label="Work portfolio"
+    >
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-white glow-heading">
+          My Work
+        </h2>
+        
+        {/* Filter Section */}
+        <div className="mb-8">
+          <div className="hidden md:flex flex-wrap gap-2 justify-center">
+            <button
+              onClick={() => {
+                setFilter('all');
+                setSubCategory('');
+              }}
+              className={`px-4 py-2 rounded-full text-sm font-medium ${
+                filter === 'all' ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
+              }`}
+              aria-current={filter === 'all' ? 'page' : undefined}
+            >
+              All
+            </button>
+            {Object.values(ProjectCategory).map(category => (
+              <div key={category} className="flex flex-col gap-1">
+                <button
+                  onClick={() => {
+                    setFilter(category);
+                    if (category === ProjectCategory.Gaming && filter === ProjectCategory.Gaming) {
+                      setSubCategory('');
+                    }
+                    if (category !== ProjectCategory.Gaming) {
+                      setSubCategory('');
+                    }
+                  }}
+                  className={`px-4 py-2 rounded-full text-sm font-medium ${
+                    filter === category ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
+                  }`}
+                  aria-current={filter === category ? 'page' : undefined}
+                >
+                  {category}
+                </button>
+                
+                {/* Gaming subcategories buttons */}
+                {category === ProjectCategory.Gaming && filter === ProjectCategory.Gaming && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        if (subCategory === GamingSubCategory.RecentWorks) {
+                          setSubCategory('');
+                        } else {
+                          setSubCategory(GamingSubCategory.RecentWorks);
+                        }
+                      }}
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                        subCategory === GamingSubCategory.RecentWorks ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
+                      }`}
+                    >
+                      Recent works
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (subCategory === GamingSubCategory.ReEdits) {
+                          setSubCategory('');
+                        } else {
+                          setSubCategory(GamingSubCategory.ReEdits);
+                        }
+                      }}
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                        subCategory === GamingSubCategory.ReEdits ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
+                      }`}
+                    >
+                      Re-edits
+                    </button>
+                  </div>
+                )}
+
+                {/* Long-form subcategories buttons */}
+                {category === ProjectCategory.LongForm && filter === ProjectCategory.LongForm && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        if (subCategory === LongFormSubCategory.RecentWorks) {
+                          setSubCategory('');
+                        } else {
+                          setSubCategory(LongFormSubCategory.RecentWorks);
+                        }
+                      }}
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                        subCategory === LongFormSubCategory.RecentWorks ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
+                      }`}
+                    >
+                      Recent works
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (subCategory === LongFormSubCategory.ReEdits) {
+                          setSubCategory('');
+                        } else {
+                          setSubCategory(LongFormSubCategory.ReEdits);
+                        }
+                      }}
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                        subCategory === LongFormSubCategory.ReEdits ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
+                      }`}
+                    >
+                      Re-edits
+                    </button>
+                  </div>
+                )}
+
+                {/* Short-form subcategories buttons */}
+                {category === ProjectCategory.ShortForm && filter === ProjectCategory.ShortForm && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        if (subCategory === ShortFormSubCategory.RecentWorks) {
+                          setSubCategory('');
+                        } else {
+                          setSubCategory(ShortFormSubCategory.RecentWorks);
+                        }
+                      }}
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                        subCategory === ShortFormSubCategory.RecentWorks ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
+                      }`}
+                    >
+                      Recent works
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (subCategory === ShortFormSubCategory.ReEdits) {
+                          setSubCategory('');
+                        } else {
+                          setSubCategory(ShortFormSubCategory.ReEdits);
+                        }
+                      }}
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                        subCategory === ShortFormSubCategory.ReEdits ? 'bg-brand-purple text-white' : 'bg-gray-800 hover:bg-gray-700'
+                      }`}
+                    >
+                      Re-edits
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile Filter Dropdown */}
+          <div className="md:hidden">
+            <select
+              value={filter}
+              onChange={(e) => {
+                const value = e.target.value as ProjectCategory | 'all';
+                setFilter(value);
+                if (value !== 'all') {
+                  setSubCategory('');
+                }
+              }}
+              className="w-full px-4 py-2 rounded-full bg-gray-800 text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-purple"
+            >
+              <option value="all">All Categories</option>
+              {Object.values(ProjectCategory).map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+
+            {filter !== 'all' && (
+              <select
+                value={subCategory}
+                onChange={(e) => setSubCategory(e.target.value)}
+                className="w-full px-4 py-2 rounded-full bg-gray-800 text-white text-sm font-medium mt-2 focus:outline-none focus:ring-2 focus:ring-brand-purple"
+              >
+                <option value="">All Subcategories</option>
+                {filter === ProjectCategory.Gaming && (
+                  <>
+                    <option value={GamingSubCategory.RecentWorks}>Recent works</option>
+                    <option value={GamingSubCategory.ReEdits}>Re-edits</option>
+                  </>
+                )}
+                {filter === ProjectCategory.LongForm && (
+                  <>
+                    <option value={LongFormSubCategory.RecentWorks}>Recent works</option>
+                    <option value={LongFormSubCategory.ReEdits}>Re-edits</option>
+                  </>
+                )}
+                {filter === ProjectCategory.ShortForm && (
+                  <>
+                    <option value={ShortFormSubCategory.RecentWorks}>Recent works</option>
+                    <option value={ShortFormSubCategory.ReEdits}>Re-edits</option>
+                  </>
+                )}
+              </select>
+            )}
+          </div>
         </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
+          {filteredProjects.map((project) => (
             <ProjectCard
               key={project.id}
               project={project}
               onProjectClick={handleProjectClick}
-              isLoading={loadingImages.has(project.id)}
+              isLoading={loadingVideo}
               onImageLoad={handleImageLoad}
             />
           ))}
         </div>
-      </div>
 
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-2 sm:p-4"
-            ref={overlayRef}
-            role="dialog"
-            aria-labelledby={`modal-${selectedProject.id}`}
-            aria-modal="true"
-            onClick={closeModal}
-            onKeyDown={handleDivKeyDown}
-            tabIndex={0}
-            aria-label={`View ${selectedProject.title} project`}
-          >
+        <AnimatePresence>
+          {selectedProject && (
             <motion.div 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="bg-brand-deepest-blue rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto"
-              ref={modalRef}
-              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
+              onClick={closeModal}
+              onKeyDown={handleKeyDown}
+              role="dialog"
+              aria-labelledby={`modal-${selectedProject.id}`}
+              aria-modal="true"
+              tabIndex={-1}
             >
-              <div className="p-3 sm:p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 id={`modal-${selectedProject.id}`} className="text-xl sm:text-2xl font-bold glow-heading">
-                    {selectedProject.title}
-                  </h3>
-                  <button 
-                    onClick={closeModal}
-                    className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800"
-                    aria-label="Close modal"
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="aspect-video bg-black rounded-lg mb-4 overflow-hidden relative">
-                  {selectedProject.videoType && selectedProject.videoType !== 'none' ? (
-                    videoPlaying ? (
-                      <VideoPlayer 
-                        project={selectedProject}
-                        isLoading={loadingVideo}
-                        onLoad={() => setLoadingVideo(false)}
-                      />
-                    ) : (
-                      <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="w-full h-full relative cursor-pointer group"
-                        onClick={handleVideoPlay}
-                        onKeyDown={(e) => e.key === 'Enter' && handleVideoPlay()}
-                        tabIndex={0}
-                        role="button"
-                        aria-label={`Play ${selectedProject.title} video`}
-                      >
+              <motion.div 
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="bg-brand-deepest-blue rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto m-auto"
+                ref={modalRef}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="p-3 sm:p-6">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 id={`modal-${selectedProject.id}`} className="text-xl sm:text-2xl font-bold glow-heading">
+                      {selectedProject.videoTitle || selectedProject.title}
+                    </h3>
+                    <button 
+                      onClick={closeModal}
+                      className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800"
+                      aria-label="Close modal"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-400">Duration:</span>
+                        <span className="text-sm font-medium">{selectedProject.duration}</span>
+                      </div>
+                      <span className="text-sm text-gray-400">{selectedProject.category}</span>
+                    </div>
+
+                    <div className="aspect-video bg-black rounded-lg mb-4 overflow-hidden relative">
+                      {selectedProject.videoType && selectedProject.videoType !== 'none' ? (
+                        videoPlaying ? (
+                          <VideoPlayer 
+                            project={selectedProject}
+                            isLoading={loadingVideo}
+                            onLoad={() => setLoadingVideo(false)}
+                          />
+                        ) : (
+                          <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="w-full h-full relative cursor-pointer group overflow-hidden"
+                            onClick={() => {
+                              setVideoPlaying(true);
+                            }}
+                            onKeyDown={(e) => e.key === 'Enter' && setVideoPlaying(true)}
+                            tabIndex={0}
+                            role="button"
+                            aria-label={`Play ${selectedProject.title} video`}
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 group-hover:to-black/60 transition-all duration-300" />
+                            <img 
+                              src={getVideoThumbnail(selectedProject)} 
+                              alt={`${selectedProject.title} thumbnail`}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <div className="bg-brand-purple/90 rounded-full p-4 transform group-hover:scale-110 transition-transform">
+                                <Play className="w-12 h-12 text-white" />
+                              </div>
+                            </div>
+                          </motion.div>
+                        )
+                      ) : (
                         <img 
-                          src={getVideoThumbnail(selectedProject)} 
-                          alt={`${selectedProject.title} thumbnail`}
+                          src={selectedProject.imageUrl} 
+                          alt={selectedProject.title}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                          width={1280}
+                          height={720}
+                          loading="eager"
                         />
-                        <motion.div 
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity"
-                        >
-                          <div className="bg-brand-purple/80 rounded-full p-4 transform group-hover:scale-110 transition-transform">
-                            <Play className="w-12 h-12 text-white" />
-                          </div>
-                        </motion.div>
-                      </motion.div>
-                    )
-                  ) : (
-                    <img 
-                      src={selectedProject.imageUrl} 
-                      alt={selectedProject.title}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                      width={1280}
-                      height={720}
-                    />
-                  )}
+                      )}
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="text-gray-300">
+                        <h4 className="font-semibold mb-3 text-lg">Description</h4>
+                        <p className="text-gray-400 leading-relaxed">{selectedProject.description}</p>
+                      </div>
+
+                      <div className="text-gray-300">
+                        <h4 className="font-semibold mb-3 text-lg">Editing Techniques Used</h4>
+                        <div className="flex flex-wrap gap-3">
+                          {selectedProject.editingTechniques.map(technique => (
+                            <span 
+                              key={technique}
+                              className="px-3 py-1.5 bg-gradient-to-r from-brand-purple/30 to-brand-purple/20 rounded-full text-sm font-medium"
+                            >
+                              {technique}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {selectedProject.clientTestimonial && (
+                        <div className="text-gray-300">
+                          <h4 className="font-semibold mb-3 text-lg">Client Feedback</h4>
+                          <blockquote className="text-gray-400 italic text-lg leading-relaxed">
+                            "{selectedProject.clientTestimonial}"
+                          </blockquote>
+                          <p className="text-gray-400 mt-4 font-medium">-{selectedProject.clientName}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-gray-300">
-                  <p className="mb-2"><strong>Category:</strong> {selectedProject.category}</p>
-                  <p>
-                    This is a showcase of my professional video editing work. Each project represents unique challenges 
-                    and creative solutions implemented to deliver stunning visual content.
-                  </p>
-                </div>
-              </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </div>
     </section>
   );
 };
 
-export default memo(WorkSection);
+export default WorkSection;
