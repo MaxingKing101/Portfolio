@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "type-check": "tsc --build --force",
-    "deploy:github": "npm run build && gh-pages -d dist -b gh-pages -r https://github.com/maxingkingvfx/portfolio.git",
+    "deploy": "npm run build && gh-pages -d dist -b gh-pages -r https://github.com/maxingkingvfx/portfolio.git",
     "deploy:cf": "npm run build",
     "lint:fix": "eslint . --fix --cache --cache-location ./node_modules/.cache/eslint/"
   },
@@ -90,5 +90,10 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.18"
+  },
+  "overrides": {
+    "react-hook-form": {
+      "react": "^18.3.1"
+    }
   }
 }

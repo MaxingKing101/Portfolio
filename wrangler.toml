@@ -10,6 +10,9 @@ directory = "dist"
 [env.production.build]
 command = "npm run build"
 
+[env.production.build.output]
+directory = "dist"
+
 [env.github]
 [env.github.build]
 command = "npm run build"
