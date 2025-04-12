@@ -19,30 +19,30 @@ const clients: Testimonial[] = [
   {
     id: 1,
     icon: <UserRound className="h-8 w-8 text-brand-light-purple" />,
-    name: "John Roberts",
-    role: "YouTuber",
-    comment: "MaxingKing's edits took my content to another level. The quality speaks for itself."
+    name: "",
+    role: "",
+    comment: ""
   },
   {
     id: 2,
     icon: <Users className="h-8 w-8 text-brand-blue" />,
-    name: "Stellar Studios",
-    role: "Production Company",
-    comment: "Professional, timely, and creative. Our go-to editor for all projects."
+    name: "",
+    role: "",
+    comment: ""
   },
   {
     id: 3,
     icon: <Sparkles className="h-8 w-8 text-brand-purple" />,
-    name: "Lisa Chen",
-    role: "Content Creator",
-    comment: "The color grading work is simply outstanding. Transformed my videos completely."
+    name: "",
+    role: "",
+    comment: ""
   },
   {
     id: 4,
     icon: <HandHeart className="h-8 w-8 text-brand-light-purple" />,
-    name: "PixelPerfect",
-    role: "Gaming Channel",
-    comment: "Fast turnarounds without compromising quality. Highly recommended!"
+    name: "",
+    role: "",
+    comment: ""
   }
 ];
 

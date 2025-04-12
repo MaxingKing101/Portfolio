@@ -11,7 +11,7 @@ interface Project {
   category: ProjectCategory;
   subCategory?: GamingSubCategory | ShortFormSubCategory | LongFormSubCategory;
   imageUrl: string;
-  videoType?: 'vimeo' | 'youtube' | 'none';
+  videoType: ('vimeo' | 'youtube' | 'long' | 'short' | 'none')[];
   videoId?: string;
   videoHash?: string;
   thumbnailUrl?: string;
@@ -57,7 +57,42 @@ const themeVars = {
   '--transition-duration': '0.4s',
   '--card-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
   '--card-shadow-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+  '--card-width': '320px',
+  '--card-height': '240px',
+  '--card-padding': '1rem',
 } as const;
+
+const longFormVideoSettings = {
+  '--card-hover-bg': 'rgba(255, 255, 255, 0.1)',
+  '--card-hover-scale': '1.03',
+  '--gradient-start': '#2a2a2a',
+  '--gradient-end': '#1a1a1a',
+  '--transition-duration': '0.4s',
+  '--card-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  '--card-shadow-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+  '--card-width': '400px',
+  '--card-height': '300px',
+  '--card-padding': '1.5rem',
+} as const;
+
+const shortFormVideoSettings = {
+  '--card-hover-bg': 'rgba(255, 255, 255, 0.1)',
+  '--card-hover-scale': '1.03',
+  '--gradient-start': '#1a1a1a',
+  '--gradient-end': '#2a2a2a',
+  '--transition-duration': '0.4s',
+  '--card-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  '--card-shadow-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+  '--card-width': '240px',
+  '--card-height': '420px',
+  '--card-padding': '0.5rem',
+} as const;
+
+const getThemeSettings = (videoType: Project['videoType']) => {
+  if (videoType.includes('long')) return longFormVideoSettings;
+  if (videoType.includes('short')) return shortFormVideoSettings;
+  return themeVars;
+};
 
 // Helper functions
 const getVideoThumbnail = (project: Project): string => {
@@ -65,12 +100,12 @@ const getVideoThumbnail = (project: Project): string => {
 };
 
 const getVideoEmbedUrl = (project: Project, autoplay: boolean = false): string => {
-  if (project.videoType === 'vimeo' && project.videoId) {
+  if (project.videoType.includes('vimeo') && project.videoId) {
     const autoplayParam = autoplay ? '&autoplay=1&autopause=0' : '';
     const hashParam = project.videoHash ? `h=${project.videoHash}` : '';
     return `https://player.vimeo.com/video/${project.videoId}?${hashParam}&title=0&byline=0&portrait=0&badge=0&dnt=1&responsive=1&quality=auto${autoplayParam}`;
   }
-  if (project.videoType === 'youtube' && project.videoId) {
+  if (project.videoType.includes('youtube') && project.videoId) {
     const autoplayParam = autoplay ? '&autoplay=1&mute=1' : '';
     return `https://www.youtube.com/embed/${project.videoId}?rel=0&showinfo=0${autoplayParam}`;
   }
@@ -107,7 +142,7 @@ const projectConfig: { [id: number]: Project } = {
     category: ProjectCategory.Gaming,
     subCategory: GamingSubCategory.ReEdits,
     imageUrl: "https://i.ibb.co/0jjgJ7T0/thumb-1.jpg",
-    videoType: "vimeo",
+    videoType: ['vimeo', 'long'],
     videoId: "1074270789",
     videoHash: "8538c1e45e",
     thumbnailUrl: "https://i.ibb.co/GfKvBsKb/a98525a4-563d-4e02-b78a-143e815ee444.jpg",
@@ -122,7 +157,7 @@ const projectConfig: { [id: number]: Project } = {
     category: ProjectCategory.Gaming,
     subCategory: GamingSubCategory.ReEdits,
     imageUrl: "https://i.ibb.co/My2NsbBr/thumb.jpg",
-    videoType: "vimeo",
+    videoType: ['vimeo'],
     videoId: "1074265085",
     videoHash: "495fb1c813",
     thumbnailUrl: "https://i.ibb.co/HDZL4ZH7/pgq5w-Wy-KFl-E-HD.jpg",
@@ -137,7 +172,7 @@ const projectConfig: { [id: number]: Project } = {
     category: ProjectCategory.Gaming,
     subCategory: GamingSubCategory.RecentWorks,
     imageUrl: "https://i.ibb.co/Y4NY0wpT/thumb.jpg",
-    videoType: "vimeo",
+    videoType: ['vimeo'],
     videoId: "1074652341",
     videoHash: "fb04a95288",
     thumbnailUrl: "https://i.ibb.co/7N6c6yFR/REPO.png",
@@ -145,6 +180,21 @@ const projectConfig: { [id: number]: Project } = {
     description: "Content Highlights for UnsaltedSalt R.E.P.O's gameplay",
     editingTechniques: ["Color Grading", "SFX", "Transitions", "Equalization", "POV"],
     id: 3
+  },
+  4: {
+    title: "UnsaltedSalt",
+    videoTitle: "AI will take over the world Meanwhile AI",
+    category: ProjectCategory.Gaming,
+    subCategory: ShortFormSubCategory.RecentWorks,
+    imageUrl: "https://i.ibb.co/DDYHthTy/thumb.jpg",
+    videoType: ['vimeo', 'short'],
+    videoId: "1074964808",
+    videoHash: "c758a663eb",
+    thumbnailUrl: "https://i.ibb.co/DDYHthTy/thumb.jpg",
+    duration: "0:46",
+    description: "The short that got 100K on TikTok, 16K on Youtube.",
+    editingTechniques: ["Color Grading", "SFX", "Transitions", "Equalization", "Memes"],
+    id: 4
   }
 };
 
@@ -178,6 +228,8 @@ const ProjectCard = memo(({ project, onProjectClick, isLoading, onImageLoad }: P
     triggerOnce: true,
   });
 
+  const themeSettings = getThemeSettings(project.videoType);
+
   return (
     <motion.div 
       ref={ref}
@@ -185,18 +237,23 @@ const ProjectCard = memo(({ project, onProjectClick, isLoading, onImageLoad }: P
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5 }}
-      className="rounded-lg overflow-hidden group relative cursor-pointer"
+      className={`rounded-lg overflow-hidden group relative cursor-pointer ${project.videoType.includes('short') ? 'w-[var(--card-width)] h-[var(--card-height)] mx-auto' : ''}`}
       onClick={() => onProjectClick(project)}
       onKeyDown={(e) => e.key === 'Enter' && onProjectClick(project)}
       tabIndex={0}
       role="button"
       aria-label={`View ${project.title} project`}
       style={{
-        '--card-hover-bg': themeVars['--card-hover-bg'],
-        '--card-hover-scale': themeVars['--card-hover-scale'],
-        '--gradient-start': themeVars['--gradient-start'],
-        '--gradient-end': themeVars['--gradient-end'],
-        '--transition-duration': themeVars['--transition-duration'],
+        '--card-hover-bg': themeSettings['--card-hover-bg'],
+        '--card-hover-scale': themeSettings['--card-hover-scale'],
+        '--gradient-start': themeSettings['--gradient-start'],
+        '--gradient-end': themeSettings['--gradient-end'],
+        '--transition-duration': themeSettings['--transition-duration'],
+        '--card-shadow': themeSettings['--card-shadow'],
+        '--card-shadow-hover': themeSettings['--card-shadow-hover'],
+        '--card-width': themeSettings['--card-width'] || themeVars['--card-width'],
+        '--card-height': themeSettings['--card-height'] || themeVars['--card-height'],
+        '--card-padding': themeSettings['--card-padding'] || themeVars['--card-padding']
       } as React.CSSProperties}
       whileHover={{
         scale: 1.02,
@@ -215,7 +272,7 @@ const ProjectCard = memo(({ project, onProjectClick, isLoading, onImageLoad }: P
         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
         onLoad={onImageLoad}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 flex flex-col justify-end p-4">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 flex flex-col justify-end p-[var(--card-padding)]">
         <motion.p 
           className="text-sm text-gray-300 transition-colors duration-300 group-hover:text-white"
           initial={{ y: 0, opacity: 1 }}
@@ -248,25 +305,52 @@ const VideoPlayer = memo(({ project, isLoading, onLoad }: VideoPlayerProps) => {
     console.error('Video player error:', error);
   }, []);
 
+  const themeSettings = getThemeSettings(project.videoType);
+
   return (
-    <div className="relative w-full h-full">
+    <div className={`relative ${
+      project.videoType.includes('short') ? 'h-[90vh] w-full' : 'aspect-video'
+    }`} style={{
+      '--card-hover-bg': themeSettings['--card-hover-bg'],
+      '--card-hover-scale': themeSettings['--card-hover-scale'],
+      '--gradient-start': themeSettings['--gradient-start'],
+      '--gradient-end': themeSettings['--gradient-end'],
+      '--transition-duration': themeSettings['--transition-duration'],
+      '--card-shadow': themeSettings['--card-shadow'],
+      '--card-shadow-hover': themeSettings['--card-shadow-hover']
+    } as React.CSSProperties}>
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/80">
           <Loader2 className="w-8 h-8 animate-spin text-brand-purple" />
         </div>
       )}
-      
-      <iframe
-        src={getVideoEmbedUrl(project, true)}
-        className="w-full h-full"
-        frameBorder="0" 
-        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" 
-        allowFullScreen
-        title={project.title}
-        onLoad={handleLoad}
-        onError={handleError}
-        aria-label={`${project.title} video player`}
-      />
+      {project.videoType.includes('vimeo') || project.videoType.includes('youtube') ? (
+        <iframe
+          src={getVideoEmbedUrl(project, true)}
+          className="w-full h-full absolute inset-0"
+          frameBorder="0" 
+          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" 
+          allowFullScreen
+          title={project.title}
+          onLoad={handleLoad}
+          onError={handleError}
+          aria-label={`${project.title} video player`}
+        />
+      ) : (
+        <div className="relative w-full h-full">
+          <img 
+            src={getVideoThumbnail(project)} 
+            alt={`${project.title} thumbnail`}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 group-hover:to-black/60 transition-all duration-300" />
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="bg-brand-purple/90 rounded-full p-4 transform group-hover:scale-110 transition-transform">
+              <Play className="w-12 h-12 text-white" />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 });
@@ -568,7 +652,9 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
+              className={`fixed inset-0 bg-black/90 z-50 flex items-center justify-center ${
+                selectedProject.videoType.includes('short') ? 'h-screen w-screen' : ''
+              }`}
               onClick={closeModal}
               onKeyDown={handleKeyDown}
               role="dialog"
@@ -581,7 +667,11 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="bg-brand-deepest-blue rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto m-auto"
+                className={`bg-brand-deepest-blue rounded-lg ${
+                  selectedProject.videoType.includes('short') 
+                    ? 'w-[90%] max-w-[600px] h-[90vh] rounded-none' 
+                    : 'max-w-4xl w-full max-h-[90vh]'
+                } overflow-auto m-auto`}
                 ref={modalRef}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -608,8 +698,12 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                       <span className="text-sm text-gray-400">{selectedProject.category}</span>
                     </div>
 
-                    <div className="aspect-video bg-black rounded-lg mb-4 overflow-hidden relative">
-                      {selectedProject.videoType && selectedProject.videoType !== 'none' ? (
+                    <div className={`relative ${
+                      selectedProject.videoType.includes('short') 
+                        ? 'h-[90vh] w-full' 
+                        : 'aspect-video bg-black rounded-lg'
+                    } overflow-hidden`}>
+                      {selectedProject.videoType.includes('vimeo') || selectedProject.videoType.includes('youtube') ? (
                         videoPlaying ? (
                           <VideoPlayer 
                             project={selectedProject}
@@ -633,7 +727,11 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                             <img 
                               src={getVideoThumbnail(selectedProject)} 
                               alt={`${selectedProject.title} thumbnail`}
-                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]"
+                              className={`w-full h-full object-cover transition-transform duration-300 ${
+                                selectedProject.videoType.includes('short') 
+                                  ? 'group-hover:scale-[1.05]'
+                                  : 'group-hover:scale-[1.05]'
+                              }`}
                             />
                             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                               <div className="bg-brand-purple/90 rounded-full p-4 transform group-hover:scale-110 transition-transform">
@@ -646,7 +744,11 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                         <img 
                           src={selectedProject.imageUrl} 
                           alt={selectedProject.title}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                          className={`w-full h-full object-cover transition-transform duration-300 ${
+                            selectedProject.videoType.includes('short') 
+                              ? 'group-hover:scale-[1.05]'
+                              : 'group-hover:scale-[1.02]'
+                          }`}
                           width={1280}
                           height={720}
                           loading="eager"
