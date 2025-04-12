@@ -59,7 +59,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
             </a>
           </div>
           
-          <div className="flex items-center justify-center ml-4 md:ml-6">
+          <div className="flex items-center justify-center mx-2 md:mx-3">
             <a 
               href="https://x.com/MaxingKingVFX" 
               target="_blank" 
