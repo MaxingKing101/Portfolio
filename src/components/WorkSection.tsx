@@ -309,7 +309,7 @@ const VideoPlayer = memo(({ project, isLoading, onLoad }: VideoPlayerProps) => {
 
   return (
     <div className={`relative ${
-      project.videoType.includes('short') ? 'h-[90vh] w-full' : 'aspect-video'
+      project.videoType.includes('short') ? 'h-[82vh] w-full' : 'aspect-video'
     }`} style={{
       '--card-hover-bg': themeSettings['--card-hover-bg'],
       '--card-hover-scale': themeSettings['--card-hover-scale'],
@@ -669,7 +669,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
                 transition={{ duration: 0.3 }}
                 className={`bg-brand-deepest-blue rounded-lg ${
                   selectedProject.videoType.includes('short') 
-                    ? 'w-[90%] max-w-[600px] h-[90vh] rounded-none' 
+                    ? 'w-full sm:w-[85%] max-w-[550px] h-[95vh] rounded-none' 
                     : 'max-w-4xl w-full max-h-[90vh]'
                 } overflow-auto m-auto`}
                 ref={modalRef}
@@ -700,7 +700,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
 
                     <div className={`relative ${
                       selectedProject.videoType.includes('short') 
-                        ? 'h-[90vh] w-full' 
+                        ? 'h-[82vh] w-full' 
                         : 'aspect-video bg-black rounded-lg'
                     } overflow-hidden`}>
                       {selectedProject.videoType.includes('vimeo') || selectedProject.videoType.includes('youtube') ? (
