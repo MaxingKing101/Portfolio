@@ -362,6 +362,19 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
   const [filter, setFilter] = useState<ProjectCategory | 'all'>('all');
   const [subCategory, setSubCategory] = useState<string>('');
   const modalRef = useRef<HTMLDivElement>(null);
+  const [isScrollLocked, setIsScrollLocked] = useState(false);
+
+  const lockScroll = useCallback(() => {
+    setIsScrollLocked(true);
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = '17px'; // Account for scrollbar width
+  }, []);
+
+  const unlockScroll = useCallback(() => {
+    setIsScrollLocked(false);
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+  }, []);
 
   const filteredProjects = useMemo(() => {
     if (filter === 'all') return projects;
@@ -388,12 +401,14 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
 
   const handleProjectClick = useCallback((project: Project) => {
     setSelectedProject(project);
-  }, []);
+    lockScroll();
+  }, [lockScroll]);
 
   const closeModal = useCallback(() => {
     setSelectedProject(null);
     setVideoPlaying(false);
-  }, []);
+    unlockScroll();
+  }, [unlockScroll]);
 
   const handleDocumentKeyDown = useCallback((event: KeyboardEvent): void => {
     if (event.key === 'Escape') {
@@ -427,8 +442,11 @@ const WorkSection: React.FC<WorkSectionProps> = ({ id }) => {
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      if (isScrollLocked) {
+        unlockScroll();
+      }
     };
-  }, [selectedProject, closeModal]);
+  }, [selectedProject, closeModal, isScrollLocked, unlockScroll]);
 
   const handleImageLoad = useCallback(() => {
     setLoadingVideo(false);
