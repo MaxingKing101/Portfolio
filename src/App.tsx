@@ -5,6 +5,7 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { preloadAllImages } from "./lib/preload-utils";
 
 const Index = lazy(() => import("./pages/Index"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -19,52 +20,32 @@ const App: React.FC<AppProps> = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadImage = async () => {
+    const loadAllImages = async () => {
       try {
-        const image = new Image();
-        // Use the correct path based on deployment environment
-        const getImagePath = () => {
-          if (process.env.NODE_ENV === 'production') {
-            // Check if we're on GitHub Pages
-            if (window.location.hostname === 'maxingkingvfx.github.io') {
-              return 'https://maxingkingvfx.github.io/portfolio/Background-image/timeline-editing.png';
-            }
-            // Check if we're on Cloudflare Pages
-            if (window.location.hostname.includes('pages.dev')) {
-              return '/Background-image/timeline-editing.png'; // Cloudflare Pages uses relative paths
-            }
-            // Default to relative path for other production environments
-            return '/Background-image/timeline-editing.png';
-          }
-          // Local development
-          return '/Background-image/timeline-editing.png';
-        };
-
-        image.src = getImagePath();
-        await new Promise((resolve, reject) => {
-          image.onload = resolve;
-          image.onerror = reject;
-        });
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error loading image:', error);
+        // Preload all images in the project without displaying progress
+        await preloadAllImages();
+      } catch {
+        // Silently ignore errors and continue without preloading
+      } finally {
         setIsLoading(false);
       }
     };
 
+    // Set a maximum loading time to ensure the app doesn't get stuck
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1200); // 1.2 seconds delay
+    }, 3000); // 3 seconds maximum loading time
 
-    loadImage();
+    loadAllImages();
 
     return () => clearTimeout(timer);
   }, []);
 
   if (isLoading) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        Loading...
+      <div className="h-screen flex flex-col items-center justify-center bg-brand-deepest-blue text-white">
+        <div className="w-16 h-16 border-4 border-t-brand-purple border-r-brand-light-purple border-b-brand-blue border-l-transparent rounded-full animate-spin mb-4"></div>
+        <p className="text-lg font-medium">Loading assets...</p>
       </div>
     );
   }
