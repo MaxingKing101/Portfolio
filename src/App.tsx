@@ -19,9 +19,26 @@ const App: React.FC<AppProps> = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const loadImage = async () => {
+      try {
+        const image = new Image();
+        image.src = '/Background-image/timeline-editing.png';
+        await new Promise((resolve, reject) => {
+          image.onload = resolve;
+          image.onerror = reject;
+        });
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error loading image:', error);
+        setIsLoading(false);
+      }
+    };
+
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500); // 1.5 seconds delay
+    }, 1200); // 1.2 seconds delay
+
+    loadImage();
 
     return () => clearTimeout(timer);
   }, []);
