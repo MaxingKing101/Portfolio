@@ -9,7 +9,6 @@ import { SectionProps } from '@/types/section';
  * Clients section component
  */
 const ClientsSection: React.FC<SectionProps> = ({ id }) => {
-  const [focusedTestimonial, setFocusedTestimonial] = useState<number | null>(null);
   const [hoveredTestimonial, setHoveredTestimonial] = useState<number | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -36,13 +35,13 @@ const ClientsSection: React.FC<SectionProps> = ({ id }) => {
   }, [id]);
 
   return (
-    <Section 
-      id={id} 
-      title="CLIENTS" 
+    <Section
+      id={id}
+      title="CLIENTS"
       background="black"
       ariaLabelledby="clients-title"
     >
-      <motion.div 
+      <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-8 sm:mt-12"
         initial={{ opacity: 0 }}
         animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
@@ -53,11 +52,8 @@ const ClientsSection: React.FC<SectionProps> = ({ id }) => {
             client={client}
             index={index}
             isHovered={hoveredTestimonial === client.id}
-            isFocused={focusedTestimonial === client.id}
             onMouseEnter={() => setHoveredTestimonial(client.id)}
             onMouseLeave={() => setHoveredTestimonial(null)}
-            onFocus={() => setFocusedTestimonial(client.id)}
-            onBlur={() => setFocusedTestimonial(null)}
           />
         ))}
       </motion.div>

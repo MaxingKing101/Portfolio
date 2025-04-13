@@ -6,11 +6,8 @@ interface TestimonialCardProps {
   client: Testimonial;
   index: number;
   isHovered: boolean;
-  isFocused: boolean;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
-  onFocus: () => void;
-  onBlur: () => void;
 }
 
 /**
@@ -20,58 +17,57 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
   client,
   index,
   isHovered,
-  isFocused,
   onMouseEnter,
-  onMouseLeave,
-  onFocus,
-  onBlur
+  onMouseLeave
 }) => {
   return (
     <motion.div
       key={client.id}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.05 }}
       transition={{
-        duration: 0.5,
+        duration: 0.1,
         ease: "easeOut",
-        delay: index * 0.1
+        delay: index * 0.1,
+        hover: { duration: 0.05, delay: 0 }
       }}
       viewport={{ once: true }}
       className={cn(
-        "client-card bg-opacity-10 bg-gray-800 border border-gray-800 p-4 sm:p-6 rounded-lg transition-all duration-300",
-        "transform-gpu hover:scale-105 focus-within:scale-105",
-        "hover:border-brand-purple focus-within:border-brand-purple",
-        (isFocused || isHovered) && "border-brand-purple"
+        "client-card p-4 sm:p-6 rounded-lg transition-all duration-200",
+        "bg-gradient-to-r from-black/80 to-black/60 backdrop-blur-lg hover:from-black/70 hover:to-black/50",
+        "border border-gray-800",
+        "hover:border-brand-purple",
+        isHovered && "border-brand-purple"
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      tabIndex={0}
       role="article"
       aria-labelledby={`client-${client.id}-name`}
-      onFocus={onFocus}
-      onBlur={onBlur}
     >
       <div className="flex items-center mb-4">
         <div className={cn(
-          "mr-3 transform-gpu transition-all duration-300",
-          (isFocused || isHovered) ? "scale-110" : "animate-pulse-slow"
+          "mr-3 transform-gpu transition-all duration-200",
+          isHovered ? "scale-110" : "animate-pulse-slow"
         )}>
           {client.icon}
         </div>
         <div>
-          <h3
+          <motion.h3
             id={`client-${client.id}-name`}
             className="text-lg sm:text-xl font-semibold text-white glow-heading"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2, delay: 0 }}
           >
             {client.name || "Client Name"}
-          </h3>
-          <p className="text-brand-light-purple text-xs sm:text-sm">
+          </motion.h3>
+          <p className="text-brand-light-purple text-xs sm:text-sm transition-colors duration-200 hover:text-white/90">
             {client.role || "Client Role"}
           </p>
         </div>
       </div>
       <div className="relative">
-        <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+        <p className="text-gray-400 text-sm sm:text-base leading-relaxed transition-colors duration-200 hover:text-white/90">
           {client.comment || "[Placeholder] Client testimonial will appear here."}
         </p>
       </div>
