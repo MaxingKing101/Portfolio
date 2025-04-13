@@ -1,22 +1,25 @@
 import { FC } from 'react';
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import WorkSection from "@/components/WorkSection";
-import ServicesSection from "@/components/ServicesSection";
-import ClientsSection from "@/components/ClientsSection";
-import ContactSection from "@/components/ContactSection";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/layout/Navbar";
+import HeroSection from "@/components/sections/HeroSection";
+import WorkSection from "@/components/sections/WorkSection";
+import ServicesSection from "@/components/sections/ServicesSection";
+import ClientsSection from "@/components/sections/ClientsSection";
+import ContactSection from "@/components/sections/ContactSection";
+import Footer from "@/components/layout/Footer";
 
 interface IndexProps {
   // Add any props here if needed
 }
 
+/**
+ * Main index page component
+ */
 const Index: FC<IndexProps> = () => {
   return (
     <div className="min-h-screen bg-brand-deepest-blue text-white">
       <Navbar />
       <main className="flex flex-col">
-        <Hero id="hero" />
+        <HeroSection id="hero" />
         <WorkSection id="work" />
         <ServicesSection id="services" />
         <ClientsSection id="clients" />
