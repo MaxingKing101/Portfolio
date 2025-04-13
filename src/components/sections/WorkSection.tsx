@@ -308,15 +308,41 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProjects.map((project) => (
-            <ProjectCard
+          {filteredProjects.map((project, idx) => (
+            <motion.div
               key={project.id}
-              project={project}
-              onProjectClick={handleProjectClick}
-              isLoading={loadingVideo}
-              onImageLoad={handleImageLoad}
-              themeSettings={getThemeSettings(project.videoType)}
-            />
+              initial={{ opacity: 0, y: 60, rotate: -6, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
+              transition={{
+                duration: 0.7,
+                delay: idx * 0.15,
+                type: "spring",
+                stiffness: 80,
+                damping: 18
+              }}
+              whileHover={{
+                scale: 1.04, // Keep scale
+                rotate: 2, // Restore rotation
+                // boxShadow is now handled by CSS pseudo-element
+                transition: { type: "spring", stiffness: 200, damping: 12 }
+              }}
+              whileTap={{
+                scale: 0.97,
+                rotate: -2
+              }}
+              style={{ willChange: "transform" }}
+              className={`project-card-wrapper ${
+                project.videoType.includes('short') ? 'is-short-card' : ''
+              }`} // Conditionally add class for short cards
+            >
+              <ProjectCard
+                project={project}
+                onProjectClick={handleProjectClick}
+                isLoading={loadingVideo}
+                onImageLoad={handleImageLoad}
+                themeSettings={getThemeSettings(project.videoType)}
+              />
+            </motion.div>
           ))}
         </div>
 

@@ -1,3 +1,4 @@
+/* stylelint-disable at-rule-no-unknown */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
 @tailwind base;
@@ -223,4 +224,27 @@
     animation: gradient-x 3s ease infinite;
     background-size: 200% 200%;
   }
+}
+
+/* Project Card Glow Effect */
+.project-card-wrapper {
+  position: relative; /* Needed for absolute positioning of pseudo-element */
+  border-radius: 0.5rem; /* Match card rounding */
+  overflow: visible; /* Allow shadow to extend beyond bounds */
+}
+
+.project-card-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0; /* Cover the entire wrapper */
+  border-radius: inherit; /* Inherit border-radius */
+  box-shadow: 0 0 0 0 rgba(120, 0, 255, 0); /* Initial transparent shadow */
+  transition: box-shadow 0.3s ease-in-out;
+  z-index: -1; /* Place behind the card content */
+  pointer-events: none; /* Don't interfere with clicks */
+}
+
+/* Apply glow only if the wrapper does NOT have the 'is-short-card' class */
+.project-card-wrapper:not(.is-short-card):hover::before {
+  box-shadow: 0 8px 32px 0 rgba(120, 0, 255, 0.25); /* Purple glow on hover */
 }

@@ -99,9 +99,10 @@ export const shortFormVideoSettings = {
 /**
  * Gets theme settings based on video type
  */
-export const getThemeSettings = (videoType: string[]) => {
-  if (videoType.includes('long')) return longFormVideoSettings;
-  if (videoType.includes('short')) return shortFormVideoSettings;
+export const getThemeSettings = (videoType: string | string[]) => {
+  const types = Array.isArray(videoType) ? videoType : [videoType];
+  if (types.includes('long')) return longFormVideoSettings;
+  if (types.includes('short')) return shortFormVideoSettings;
   return themeVars;
 };
 
