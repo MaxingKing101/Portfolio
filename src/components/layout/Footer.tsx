@@ -15,11 +15,11 @@ interface SocialLinkType {
  */
 const Footer = () => {
   return (
-    <footer className="py-6 bg-black text-gray-400" role="contentinfo">
+    <footer className="py-4 sm:py-6 bg-black text-gray-400" role="contentinfo">
       <div className="container mx-auto px-4">
         <div className="flex justify-center items-center h-full">
           <nav
-            className="flex items-center gap-6"
+            className="flex flex-wrap justify-center items-center gap-3 xs:gap-4 sm:gap-6"
             aria-label="Social media links"
           >
             {socialLinks.map((link: SocialLinkType) => (
@@ -29,17 +29,18 @@ const Footer = () => {
                   icon={link.icon}
                   url={link.url}
                   color={link.color}
+                  className="scale-90 sm:scale-100"
                 />
               </div>
             ))}
-            <div className="inline-flex items-center gap-2 text-gray-400 hover:text-indigo-500 transition-colors duration-300">
+            <div className="inline-flex items-center gap-1 sm:gap-2 text-gray-400 hover:text-indigo-500 transition-colors duration-300">
               <svg
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
                 stroke="currentColor"
                 strokeWidth="2.3"
-                className="w-[36px] h-[36px]"
+                className="w-[28px] h-[28px] sm:w-[36px] sm:h-[36px]"
                 aria-hidden="true"
               >
                 <defs>
@@ -62,16 +63,16 @@ const Footer = () => {
                   r="3.35"
                 />
               </svg>
-              <span className="text-sm">maxingking_</span>
+              <span className="text-xs sm:text-sm">maxingking_</span>
             </div>
-            <div className="inline-flex items-center gap-2 text-gray-400 hover:text-brand-purple transition-colors duration-300">
-              <Mail size={26} aria-hidden="true" />
+            <div className="inline-flex items-center gap-1 sm:gap-2 text-gray-400 hover:text-brand-purple transition-colors duration-300">
               <a
                 href="mailto:maxingking101@proton.me"
-                className="text-sm"
+                className="flex items-center gap-1 sm:gap-2"
                 aria-label="Send email"
               >
-                maxingking101@proton.me
+                <Mail size={24} className="sm:w-[26px] sm:h-[26px]" aria-hidden="true" />
+                <span className="text-xs sm:text-sm hidden xs:inline-block">maxingking101@proton.me</span>
               </a>
             </div>
           </nav>

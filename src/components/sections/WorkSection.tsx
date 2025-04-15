@@ -369,7 +369,7 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
                 transition={{ duration: 0.3 }}
                 className={`bg-brand-deepest-blue rounded-lg ${
                   selectedProject.videoType.includes('short')
-                    ? 'w-full sm:w-[85%] max-w-[550px] h-[95vh] rounded-none'
+                    ? 'w-full sm:w-[90%] max-w-[900px] h-[95vh] rounded-lg'
                     : 'max-w-4xl w-full max-h-[90vh]'
                 } overflow-auto m-auto`}
                 ref={modalRef}
@@ -389,115 +389,208 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
                     </button>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-400">Duration:</span>
-                        <span className="text-sm font-medium">{selectedProject.duration}</span>
-                      </div>
-                      <span className="text-sm text-gray-400">{selectedProject.category}</span>
-                    </div>
-
-                    <div className={`relative ${
-                      selectedProject.videoType.includes('short')
-                        ? 'h-[82vh] w-full'
-                        : 'aspect-video bg-black rounded-lg'
-                    } overflow-hidden`}>
-                      {selectedProject.videoType.includes('vimeo') || selectedProject.videoType.includes('youtube') ? (
-                        videoPlaying ? (
-                          <div className="w-full h-full">
-                            {loadingVideo && (
-                              <div className="absolute inset-0 flex items-center justify-center bg-black/80">
-                                <Loader2 className="w-8 h-8 animate-spin text-brand-purple" />
-                              </div>
-                            )}
-                            <iframe
-                              src={`https://player.vimeo.com/video/${selectedProject.videoId}?h=${selectedProject.videoHash}&autoplay=1&loop=1&title=0&byline=0&portrait=0`}
-                              className="w-full h-full"
-                              allow="autoplay; fullscreen; picture-in-picture"
-                              allowFullScreen
-                              onLoad={handleVideoLoad}
-                              title={selectedProject.title}
-                            ></iframe>
+                  {/* Different layout for short-form vs regular videos */}
+                  {selectedProject.videoType.includes('short') ? (
+                    <div className="flex flex-col md:flex-row gap-6">
+                      {/* Left side - Video */}
+                      <div className="md:w-1/2 lg:w-3/5">
+                        <div className="flex justify-between items-center mb-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-400">Duration:</span>
+                            <span className="text-sm font-medium">{selectedProject.duration}</span>
                           </div>
-                        ) : (
-                          <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="w-full h-full relative cursor-pointer group overflow-hidden"
-                            onClick={() => {
-                              setVideoPlaying(true);
-                              setLoadingVideo(true);
-                            }}
-                            onKeyDown={(e) => e.key === 'Enter' && setVideoPlaying(true)}
-                            tabIndex={0}
-                            role="button"
-                            aria-label={`Play ${selectedProject.title} video`}
-                          >
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 group-hover:to-black/60 transition-all duration-300" />
-                            <img
-                              src={selectedProject.thumbnailUrl || selectedProject.imageUrl}
-                              alt={`${selectedProject.title} thumbnail`}
-                              className={`w-full h-full object-cover transition-transform duration-300 ${
-                                selectedProject.videoType.includes('short')
-                                  ? 'group-hover:scale-[1.05]'
-                                  : 'group-hover:scale-[1.05]'
-                              }`}
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              <div className="bg-brand-purple/90 rounded-full p-4 transform group-hover:scale-110 transition-transform">
-                                <Play className="w-12 h-12 text-white" />
+                          <span className="text-sm text-gray-400">{selectedProject.category}</span>
+                        </div>
+
+                        <div className="relative h-[60vh] md:h-[75vh] w-full overflow-hidden rounded-lg">
+                          {selectedProject.videoType.includes('vimeo') || selectedProject.videoType.includes('youtube') ? (
+                            videoPlaying ? (
+                              <div className="w-full h-full">
+                                {loadingVideo && (
+                                  <div className="absolute inset-0 flex items-center justify-center bg-black/80">
+                                    <Loader2 className="w-8 h-8 animate-spin text-brand-purple" />
+                                  </div>
+                                )}
+                                <iframe
+                                  src={`https://player.vimeo.com/video/${selectedProject.videoId}?h=${selectedProject.videoHash}&autoplay=1&loop=1&title=0&byline=0&portrait=0`}
+                                  className="w-full h-full rounded-lg"
+                                  allow="autoplay; fullscreen; picture-in-picture"
+                                  allowFullScreen
+                                  onLoad={handleVideoLoad}
+                                  title={selectedProject.title}
+                                ></iframe>
                               </div>
-                            </div>
-                          </motion.div>
-                        )
-                      ) : (
-                        <img
-                          src={selectedProject.imageUrl}
-                          alt={selectedProject.title}
-                          className={`w-full h-full object-cover transition-transform duration-300 ${
-                            selectedProject.videoType.includes('short')
-                              ? 'group-hover:scale-[1.05]'
-                              : 'group-hover:scale-[1.02]'
-                          }`}
-                          width={1280}
-                          height={720}
-                          loading="eager"
-                        />
-                      )}
-                    </div>
-
-                    <div className="space-y-6">
-                      <div className="text-gray-300">
-                        <h4 className="font-semibold mb-3 text-lg">Description</h4>
-                        <p className="text-gray-400 leading-relaxed">{selectedProject.description}</p>
-                      </div>
-
-                      <div className="text-gray-300">
-                        <h4 className="font-semibold mb-3 text-lg">Editing Techniques Used</h4>
-                        <div className="flex flex-wrap gap-3">
-                          {selectedProject.editingTechniques.map(technique => (
-                            <span
-                              key={technique}
-                              className="px-3 py-1.5 bg-gradient-to-r from-brand-purple/30 to-brand-purple/20 rounded-full text-sm font-medium"
-                            >
-                              {technique}
-                            </span>
-                          ))}
+                            ) : (
+                              <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="w-full h-full relative cursor-pointer group overflow-hidden rounded-lg"
+                                onClick={() => {
+                                  setVideoPlaying(true);
+                                  setLoadingVideo(true);
+                                }}
+                                onKeyDown={(e) => e.key === 'Enter' && setVideoPlaying(true)}
+                                tabIndex={0}
+                                role="button"
+                                aria-label={`Play ${selectedProject.title} video`}
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 group-hover:to-black/60 transition-all duration-300" />
+                                <img
+                                  src={selectedProject.thumbnailUrl || selectedProject.imageUrl}
+                                  alt={`${selectedProject.title} thumbnail`}
+                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                  <div className="bg-brand-purple/90 rounded-full p-4 transform group-hover:scale-110 transition-transform">
+                                    <Play className="w-12 h-12 text-white" />
+                                  </div>
+                                </div>
+                              </motion.div>
+                            )
+                          ) : (
+                            <img
+                              src={selectedProject.imageUrl}
+                              alt={selectedProject.title}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05] rounded-lg"
+                              width={1280}
+                              height={720}
+                              loading="eager"
+                            />
+                          )}
                         </div>
                       </div>
 
-                      {selectedProject.clientTestimonial && (
+                      {/* Right side - Info */}
+                      <div className="md:w-1/2 lg:w-2/5 space-y-6 mt-4 md:mt-12">
                         <div className="text-gray-300">
-                          <h4 className="font-semibold mb-3 text-lg">Client Feedback</h4>
-                          <blockquote className="text-gray-400 italic text-lg leading-relaxed">
-                            "{selectedProject.clientTestimonial}"
-                          </blockquote>
-                          <p className="text-gray-400 mt-4 font-medium">-{selectedProject.clientName}</p>
+                          <h4 className="font-semibold mb-3 text-lg">Description</h4>
+                          <p className="text-gray-400 leading-relaxed">{selectedProject.description}</p>
                         </div>
-                      )}
+
+                        <div className="text-gray-300">
+                          <h4 className="font-semibold mb-3 text-lg">Editing Techniques Used</h4>
+                          <div className="flex flex-wrap gap-3">
+                            {selectedProject.editingTechniques.map(technique => (
+                              <span
+                                key={technique}
+                                className="px-3 py-1.5 bg-gradient-to-r from-brand-purple/30 to-brand-purple/20 rounded-full text-sm font-medium"
+                              >
+                                {technique}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {selectedProject.clientTestimonial && (
+                          <div className="text-gray-300">
+                            <h4 className="font-semibold mb-3 text-lg">Client Feedback</h4>
+                            <blockquote className="text-gray-400 italic text-lg leading-relaxed">
+                              "{selectedProject.clientTestimonial}"
+                            </blockquote>
+                            <p className="text-gray-400 mt-4 font-medium">-{selectedProject.clientName}</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-400">Duration:</span>
+                          <span className="text-sm font-medium">{selectedProject.duration}</span>
+                        </div>
+                        <span className="text-sm text-gray-400">{selectedProject.category}</span>
+                      </div>
+
+                      <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
+                        {selectedProject.videoType.includes('vimeo') || selectedProject.videoType.includes('youtube') ? (
+                          videoPlaying ? (
+                            <div className="w-full h-full">
+                              {loadingVideo && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/80">
+                                  <Loader2 className="w-8 h-8 animate-spin text-brand-purple" />
+                                </div>
+                              )}
+                              <iframe
+                                src={`https://player.vimeo.com/video/${selectedProject.videoId}?h=${selectedProject.videoHash}&autoplay=1&loop=1&title=0&byline=0&portrait=0`}
+                                className="w-full h-full"
+                                allow="autoplay; fullscreen; picture-in-picture"
+                                allowFullScreen
+                                onLoad={handleVideoLoad}
+                                title={selectedProject.title}
+                              ></iframe>
+                            </div>
+                          ) : (
+                            <motion.div
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="w-full h-full relative cursor-pointer group overflow-hidden"
+                              onClick={() => {
+                                setVideoPlaying(true);
+                                setLoadingVideo(true);
+                              }}
+                              onKeyDown={(e) => e.key === 'Enter' && setVideoPlaying(true)}
+                              tabIndex={0}
+                              role="button"
+                              aria-label={`Play ${selectedProject.title} video`}
+                            >
+                              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 group-hover:to-black/60 transition-all duration-300" />
+                              <img
+                                src={selectedProject.thumbnailUrl || selectedProject.imageUrl}
+                                alt={`${selectedProject.title} thumbnail`}
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]"
+                              />
+                              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <div className="bg-brand-purple/90 rounded-full p-4 transform group-hover:scale-110 transition-transform">
+                                  <Play className="w-12 h-12 text-white" />
+                                </div>
+                              </div>
+                            </motion.div>
+                          )
+                        ) : (
+                          <img
+                            src={selectedProject.imageUrl}
+                            alt={selectedProject.title}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                            width={1280}
+                            height={720}
+                            loading="eager"
+                          />
+                        )}
+                      </div>
+
+                      <div className="space-y-6">
+                        <div className="text-gray-300">
+                          <h4 className="font-semibold mb-3 text-lg">Description</h4>
+                          <p className="text-gray-400 leading-relaxed">{selectedProject.description}</p>
+                        </div>
+
+                        <div className="text-gray-300">
+                          <h4 className="font-semibold mb-3 text-lg">Editing Techniques Used</h4>
+                          <div className="flex flex-wrap gap-3">
+                            {selectedProject.editingTechniques.map(technique => (
+                              <span
+                                key={technique}
+                                className="px-3 py-1.5 bg-gradient-to-r from-brand-purple/30 to-brand-purple/20 rounded-full text-sm font-medium"
+                              >
+                                {technique}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {selectedProject.clientTestimonial && (
+                          <div className="text-gray-300">
+                            <h4 className="font-semibold mb-3 text-lg">Client Feedback</h4>
+                            <blockquote className="text-gray-400 italic text-lg leading-relaxed">
+                              "{selectedProject.clientTestimonial}"
+                            </blockquote>
+                            <p className="text-gray-400 mt-4 font-medium">-{selectedProject.clientName}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </motion.div>
