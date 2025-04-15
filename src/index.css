@@ -45,10 +45,25 @@
   }
 
   body {
-    @apply bg-[#0c0c1d] text-foreground;
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
     color: #ffffff;
+    background: linear-gradient(135deg, #0c0c1d 0%, #13132b 25%, #0f0f20 50%, #0a0a18 75%, #080810 100%);
+    background-attachment: fixed;
+    background-size: 400% 400%;
+    animation: gradientBackground 30s ease infinite;
+  }
+
+  @keyframes gradientBackground {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
   .gradient-text {
@@ -267,6 +282,72 @@
   background: linear-gradient(90deg, rgba(139, 92, 246, 0.1), transparent);
   opacity: 0.5;
   z-index: -1;
+}
+
+/* Section background overlays */
+.section-overlay-dark {
+  position: relative;
+}
+
+.section-overlay-dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  z-index: -1;
+}
+
+.section-overlay-light {
+  position: relative;
+}
+
+.section-overlay-light::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(13, 13, 29, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: -1;
+}
+
+/* Section transition gradients */
+.section-transition-top {
+  position: relative;
+}
+
+.section-transition-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2) 40%, transparent);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.section-transition-bottom {
+  position: relative;
+}
+
+.section-transition-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2) 40%, transparent);
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* Add a subtle animation to the description text */

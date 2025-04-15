@@ -16,7 +16,7 @@ interface IndexProps {
  */
 const Index: FC<IndexProps> = () => {
   return (
-    <div className="min-h-screen bg-brand-deepest-blue text-white">
+    <div className="min-h-screen text-white">
       <Navbar />
       <main className="flex flex-col">
         <HeroSection id="hero" />

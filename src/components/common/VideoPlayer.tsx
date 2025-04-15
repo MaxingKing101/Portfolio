@@ -21,7 +21,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ project, isLoading, onLoad })
           </div>
         )}
         <iframe
-          src={`https://player.vimeo.com/video/${project.videoId}?h=${project.videoHash}&autoplay=1&loop=1&title=0&byline=0&portrait=0`}
+          src={`https://player.vimeo.com/video/${project.videoId}?h=${project.videoHash}&autoplay=1&loop=1&title=0&byline=0&portrait=0&dnt=1`}
           className="w-full h-full"
           allow="autoplay; fullscreen; picture-in-picture"
           allowFullScreen

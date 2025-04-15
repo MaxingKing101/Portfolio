@@ -110,7 +110,7 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
   return (
     <section
       id={id}
-      className="py-16 px-4 sm:px-6 lg:px-8 min-h-screen"
+      className="py-16 px-4 sm:px-6 lg:px-8 min-h-screen bg-brand-deepest-blue"
       aria-label="Work portfolio"
     >
       <div className="max-w-7xl mx-auto">
@@ -426,7 +426,7 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
                                   </div>
                                 )}
                                 <iframe
-                                  src={`https://player.vimeo.com/video/${selectedProject.videoId}?h=${selectedProject.videoHash}&autoplay=1&loop=1&title=0&byline=0&portrait=0`}
+                                  src={`https://player.vimeo.com/video/${selectedProject.videoId}?h=${selectedProject.videoHash}&autoplay=1&loop=1&title=0&byline=0&portrait=0&dnt=1`}
                                   className="w-full h-full rounded-lg"
                                   allow="autoplay; fullscreen; picture-in-picture"
                                   allowFullScreen
@@ -526,7 +526,7 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
                                 </div>
                               )}
                               <iframe
-                                src={`https://player.vimeo.com/video/${selectedProject.videoId}?h=${selectedProject.videoHash}&autoplay=1&loop=1&title=0&byline=0&portrait=0`}
+                                src={`https://player.vimeo.com/video/${selectedProject.videoId}?h=${selectedProject.videoHash}&autoplay=1&loop=1&title=0&byline=0&portrait=0&dnt=1`}
                                 className="w-full h-full"
                                 allow="autoplay; fullscreen; picture-in-picture"
                                 allowFullScreen

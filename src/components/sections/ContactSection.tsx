@@ -30,22 +30,27 @@ const ContactSection: React.FC<SectionProps> = ({ id }) => {
   };
 
   return (
-    <section id={id} className="py-20 bg-brand-deepest-blue" aria-labelledby="contact-title">
+    <section id={id} className="py-20 bg-brand-deepest-blue section-transition-top relative" aria-labelledby="contact-title">
       <div className="container mx-auto px-4 md:px-8 text-center">
-        <motion.h2
-          id="contact-title"
+        <motion.div
+          className="absolute top-0 left-0 right-0 z-10 transform -translate-y-1/2 flex justify-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-6xl md:text-7xl font-bold mb-8 glow-heading"
         >
-          LET'S GET SERIOUS
-        </motion.h2>
+          <h2
+            id="contact-title"
+            className="text-6xl md:text-7xl font-bold px-8 py-4 bg-black/70 backdrop-blur-sm rounded-lg inline-block shadow-lg shadow-black/30 glow-heading"
+          >
+            LET'S GET SERIOUS
+            <div className="w-32 h-1.5 bg-brand-purple mt-3 mx-auto transition-all duration-300 hover:w-48"></div>
+          </h2>
+        </motion.div>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-gray-300 max-w-2xl mx-auto mb-12"
+          className="text-gray-300 max-w-2xl mx-auto mt-16 sm:mt-20 mb-12"
         >
           Ready to enhance your visual content? Reach out through any of these
           channels and let's create something amazing together.

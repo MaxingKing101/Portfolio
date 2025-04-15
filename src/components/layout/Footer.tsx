@@ -15,7 +15,7 @@ interface SocialLinkType {
  */
 const Footer = () => {
   return (
-    <footer className="py-4 sm:py-6 bg-black text-gray-400" role="contentinfo">
+    <footer className="py-4 sm:py-6 section-overlay-dark text-gray-400 relative" role="contentinfo">
       <div className="container mx-auto px-4">
         <div className="flex justify-center items-center h-full">
           <nav
