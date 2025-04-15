@@ -61,7 +61,7 @@ export const projectConfig: { [id: number]: Project } = {
     videoHash: "c758a663eb",
     thumbnailUrl: "https://i.ibb.co/DDYHthTy/thumb.jpg",
     duration: "0:46",
-    description: "The short that got 100K on TikTok, 16K on Youtube.",
+    description: "The short that got 100K on TikTok, 16K on Youtube",
     editingTechniques: ["Color Grading", "SFX", "Transitions", "Equalization", "Memes"],
     id: 4
   }
