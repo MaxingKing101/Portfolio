@@ -64,6 +64,21 @@ export const projectConfig: { [id: number]: Project } = {
     description: "The short that got 100K on TikTok, 16K on Youtube",
     editingTechniques: ["Color Grading", "SFX", "Transitions", "Equalization", "Memes"],
     id: 4
+  },
+  5: {
+    title: "UnsaltedSalt",
+    videoTitle: "Tank Players THESE Days are SOMETHING Else",
+    category: ProjectCategory.Gaming,
+    subCategory: ShortFormSubCategory.RecentWorks,
+    imageUrl: "https://i.ibb.co/KxCSvWp0/thumb.jpg",
+    videoType: ['vimeo', 'short'],
+    videoId: "1076684094",
+    videoHash: "7386418452",
+    thumbnailUrl: "https://i.ibb.co/KxCSvWp0/thumb.jpg",
+    duration: "0:25",
+    description: "The best short I have ever made recently",
+    editingTechniques: ["Color Grading", "SFX", "Transitions", "Equalization", "Memes"],
+    id: 5
   }
 };
 
@@ -123,11 +138,13 @@ export const rankProjects = (projects: Project[], customRanking?: { [id: number]
   // Merge custom ranking with defaults
   const ranking = customRanking ? { ...defaultRanking, ...customRanking } : defaultRanking;
 
-  return [...projects].sort((a, b) => {
+  const sorted = [...projects].sort((a, b) => {
     const rankA = ranking[a.id] ?? a.id;
     const rankB = ranking[b.id] ?? b.id;
     return rankA - rankB;
-  }).slice(0, 6); // Limit to 6 cards
+  });
+
+  return sorted;
 };
 
 // Get all projects from config by category

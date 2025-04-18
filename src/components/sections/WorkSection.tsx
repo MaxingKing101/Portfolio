@@ -40,12 +40,10 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
   }, []);
 
   const filteredProjects = useMemo(() => {
-    if (filter === 'all') return projects;
+    // Get base filtered projects
+    let filtered = filter === 'all' ? projects : projects.filter(project => project.category === filter);
 
-    let filtered = projects.filter(project =>
-      project.category === filter
-    );
-
+    // Apply subcategory filter if selected
     if (subCategory) {
       filtered = filtered.filter(project => {
         if (project.category === ProjectCategory.Gaming) {
@@ -59,8 +57,24 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
       });
     }
 
+    // Apply mobile limit for ALL category
+    if (window.innerWidth < 768 && filter === 'all') {
+      return filtered.slice(0, 4);
+    }
+
     return filtered;
   }, [filter, subCategory]);
+
+  // Add window resize listener to handle responsive behavior
+  useEffect(() => {
+    const handleResize = () => {
+      // Force re-render when window is resized to update the filtered projects
+      setFilter(filter);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [filter]);
 
   const handleProjectClick = useCallback((project: Project) => {
     setSelectedProject(project);
@@ -265,9 +279,8 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
               onChange={(e) => {
                 const value = e.target.value as ProjectCategory | 'all';
                 setFilter(value);
-                if (value !== 'all') {
-                  setSubCategory('');
-                }
+                // Always reset subcategory when changing categories or going back to ALL
+                setSubCategory('');
               }}
               className="w-full px-4 py-2 rounded-full bg-gray-800 text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-purple"
             >
@@ -383,7 +396,7 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
                 transition={{ duration: 0.3 }}
                 className={`bg-brand-deepest-blue rounded-lg ${
                   selectedProject.videoType.includes('short')
-                    ? 'w-full sm:w-[90%] max-w-[900px] h-[95vh] rounded-lg'
+                    ? 'w-full sm:w-[90%] max-w-[900px] h-[95vh] rounded-lg md:overflow-hidden'
                     : 'max-w-4xl w-full max-h-[90vh]'
                 } overflow-auto m-auto`}
                 ref={modalRef}
@@ -416,7 +429,10 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
                           <span className="text-sm text-gray-400">{selectedProject.category}</span>
                         </div>
 
-                        <div className="relative h-[60vh] md:h-[75vh] w-full overflow-hidden rounded-lg">
+                        <div className="relative w-full overflow-hidden rounded-lg" style={{
+                          height: 'calc(100vh - 170px)', // Adjusted height to account for the yellow bars
+                          maxHeight: '90vh'
+                        }}>
                           {selectedProject.videoType.includes('vimeo') || selectedProject.videoType.includes('youtube') ? (
                             videoPlaying ? (
                               <div className="w-full h-full">
@@ -427,7 +443,15 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
                                 )}
                                 <iframe
                                   src={`https://player.vimeo.com/video/${selectedProject.videoId}?h=${selectedProject.videoHash}&autoplay=1&loop=1&title=0&byline=0&portrait=0&dnt=1`}
-                                  className="w-full h-full rounded-lg"
+                                  style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)'
+                                  }}
+                                  className="rounded-lg"
                                   allow="autoplay; fullscreen; picture-in-picture"
                                   allowFullScreen
                                   onLoad={handleVideoLoad}
@@ -452,7 +476,15 @@ const WorkSection: React.FC<SectionProps> = ({ id }) => {
                                 <img
                                   src={selectedProject.thumbnailUrl || selectedProject.imageUrl}
                                   alt={`${selectedProject.title} thumbnail`}
-                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.05]"
+                                  style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    objectFit: 'cover'
+                                  }}
                                 />
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                   <div className="bg-brand-purple/90 rounded-full p-4 transform group-hover:scale-110 transition-transform">
