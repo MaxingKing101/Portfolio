@@ -79,6 +79,21 @@ export const projectConfig: { [id: number]: Project } = {
     description: "The best short I have ever made recently",
     editingTechniques: ["Color Grading", "SFX", "Transitions", "Equalization", "Memes"],
     id: 5
+  },
+  6: {
+    title: "UnsaltedSalt",
+    videoTitle: "Bro didn’t deserve that for borrowing a candle",
+    category: ProjectCategory.Gaming,
+    subCategory: ShortFormSubCategory.RecentWorks,
+    imageUrl: "https://i.ibb.co/3YNY22Zm/thumb-1.jpg",
+    videoType: ['vimeo', 'short'],
+    videoId: "1076698006",
+    videoHash: "3797b91018",
+    thumbnailUrl: "https://i.ibb.co/3YNY22Zm/thumb-1.jpg",
+    duration: "0:30",
+    description: "Some horror gameplay",
+    editingTechniques: ["Color Grading", "SFX", "Transitions", "Equalization"],
+    id: 6
   }
 };
 
