@@ -90,7 +90,7 @@ export const projectConfig: { [id: number]: Project } = {
     videoId: "1076698006",
     videoHash: "3797b91018",
     thumbnailUrl: "https://i.ibb.co/3YNY22Zm/thumb-1.jpg",
-    duration: "0:30",
+    duration: "0:24",
     description: "Some horror gameplay",
     editingTechniques: ["Color Grading", "SFX", "Transitions", "Equalization"],
     id: 6
